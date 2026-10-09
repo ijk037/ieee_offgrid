@@ -25,7 +25,7 @@ from validation import run_temporal_validation
 
 
 def measure_pipeline_benchmarks(
-    raw_csv: str = "data/raw_complaints.csv",
+    raw_csv: str = "dataset/5f99b09a-64b5-45f0-ab18-4cf0a0cabf6d.csv" if os.path.exists("dataset/5f99b09a-64b5-45f0-ab18-4cf0a0cabf6d.csv") else "data/raw_complaints.csv",
     cleaned_csv: str = "data/cleaned_complaints.csv",
     features_csv: str = "data/features.csv"
 ) -> dict:

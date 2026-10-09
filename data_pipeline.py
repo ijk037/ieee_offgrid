@@ -265,9 +265,21 @@ def load_and_clean_data(
     return cleaned_df
 
 
+def get_default_input_path() -> str:
+    candidates = [
+        "dataset/5f99b09a-64b5-45f0-ab18-4cf0a0cabf6d.csv",
+        "dataset/raw_complaints.csv",
+        "data/raw_complaints.csv"
+    ]
+    for c in candidates:
+        if os.path.exists(c):
+            return c
+    return "dataset/5f99b09a-64b5-45f0-ab18-4cf0a0cabf6d.csv"
+
+
 def main():
     parser = argparse.ArgumentParser(description="CivicPulse AI - Person A Ingestion Pipeline")
-    parser.add_argument("--input", default="data/raw_complaints.csv", help="Path to raw complaints CSV")
+    parser.add_argument("--input", default=get_default_input_path(), help="Path to raw complaints CSV")
     parser.add_argument("--output", default="data/cleaned_complaints.csv", help="Path for cleaned output CSV")
     parser.add_argument("--summary", action="store_true", help="Print summary statistics")
     args = parser.parse_args()

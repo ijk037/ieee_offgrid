@@ -120,7 +120,12 @@ def run_full_pipeline(
 
 def main():
     parser = argparse.ArgumentParser(description="CivicPulse AI End-to-End Runner")
-    parser.add_argument("--raw", default="data/raw_complaints.csv")
+    default_raw = (
+        "dataset/5f99b09a-64b5-45f0-ab18-4cf0a0cabf6d.csv"
+        if os.path.exists("dataset/5f99b09a-64b5-45f0-ab18-4cf0a0cabf6d.csv")
+        else "data/raw_complaints.csv"
+    )
+    parser.add_argument("--raw", default=default_raw)
     parser.add_argument("--cleaned", default="data/cleaned_complaints.csv")
     parser.add_argument("--features", default="data/features.csv")
     parser.add_argument("--model", default="model.joblib")

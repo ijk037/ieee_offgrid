@@ -1,0 +1,6 @@
+pydantic
+pandas
+pytest
+scikit-learn
+streamlit
+joblib

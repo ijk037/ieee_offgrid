@@ -154,12 +154,8 @@ def index():
     payload = load_backend_payload()
     initial_json = json.dumps(payload, default=str)
 
-    # Choose primary template
-    template_name = "dashboard.html"
-    if not (TEMPLATES_DIR / template_name).exists():
-        template_name = "01-CivicPulse AI - Dashboard Over.html"
+    return render_template("dashboard.html", BACKEND_DATA_JSON=initial_json)
 
-    return render_template(template_name, BACKEND_DATA_JSON=initial_json)
 
 
 @app.route("/api/data", methods=["GET"])

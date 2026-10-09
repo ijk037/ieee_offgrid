@@ -45,9 +45,6 @@ _this_dir = str(Path(__file__).resolve().parent)
 if _this_dir not in sys.path:
     sys.path.insert(0, _this_dir)
 
-_alt_dir = "/Users/omishashukla/Desktop/offgrid/ieee_offgrid"
-if os.path.isdir(_alt_dir) and _alt_dir not in sys.path:
-    sys.path.append(_alt_dir)
 
 try:
     import features

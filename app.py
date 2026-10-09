@@ -242,8 +242,23 @@ def api_process():
 
 
 # ---------------------------------------------------------------------------
-# Server Launcher
+# Server Launcher & WSGI/ASGI Compatibility
 # ---------------------------------------------------------------------------
+
+flask_app = app
+try:
+    from asgiref.wsgi import WsgiToAsgi
+
+    class AsgiApp(WsgiToAsgi):
+        """ASGI wrapper around Flask that delegates attribute access to the underlying Flask instance."""
+
+        def __getattr__(self, name: str) -> Any:
+            return getattr(self.wsgi_application, name)
+
+    app = AsgiApp(flask_app)
+except ImportError:
+    pass
+
 
 def run_flask_app(port: int = 8000, open_browser: bool = True):
     """Run Flask development server."""
@@ -260,13 +275,14 @@ def run_flask_app(port: int = 8000, open_browser: bool = True):
     if open_browser:
         threading.Timer(0.8, lambda: webbrowser.open(url)).start()
 
-    app.run(host="127.0.0.1", port=port, debug=False)
+    flask_app.run(host="0.0.0.0" if os.environ.get("RENDER") else "127.0.0.1", port=port, debug=False)
 
 
 if __name__ == "__main__":
-    port = 8000
+    port = int(os.environ.get("PORT", 8000))
     if len(sys.argv) > 1 and sys.argv[1].isdigit():
         port = int(sys.argv[1])
 
-    auto_browser = "--no-browser" not in sys.argv
+    auto_browser = "--no-browser" not in sys.argv and not bool(os.environ.get("RENDER"))
     run_flask_app(port=port, open_browser=auto_browser)
+

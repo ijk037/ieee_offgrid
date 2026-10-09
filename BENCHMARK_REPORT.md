@@ -1,6 +1,6 @@
 # CivicPulse AI - Person A Benchmark & ML System Report
 
-**Generated:** 2026-10-09T18:11:08.548969+00:00  
+**Generated:** 2026-10-09T19:30:06.513398+00:00  
 **Status:** Validated & Production-Ready  
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric Component | Measurement | Standard SLA | Status |
 | :--- | :--- | :--- | :--- |
-| **Ingestion Throughput** | **13,881.3 rows/sec** | > 2,000 rows/sec | **OPTIMAL** |
-| **Feature Engineering Latency** | **6.591s** (93,817 obs) | < 30s | **OPTIMAL** |
-| **Model Training Duration** | **0.861s** (93,817 rows) | < 15s | **OPTIMAL** |
-| **Batch Inference Throughput** | **12,601.3 obs/sec** | > 5,000 obs/sec | **OPTIMAL** |
-| **Per-Observation Latency** | **0.0794 ms** | < 1.0 ms | **OPTIMAL** |
+| **Ingestion Throughput** | **5,419.2 rows/sec** | > 2,000 rows/sec | **OPTIMAL** |
+| **Feature Engineering Latency** | **7.328s** (93,817 obs) | < 30s | **OPTIMAL** |
+| **Model Training Duration** | **1.127s** (93,817 rows) | < 15s | **OPTIMAL** |
+| **Batch Inference Throughput** | **11,730.9 obs/sec** | > 5,000 obs/sec | **OPTIMAL** |
+| **Per-Observation Latency** | **0.0852 ms** | < 1.0 ms | **OPTIMAL** |
 | **Model Artifact Size** | **1153.3 KB** | < 50 MB | **LEAN** |
-| **Memory Footprint (RSS)** | **463.2 MB** | < 1,024 MB | **EFFICIENT** |
+| **Memory Footprint (RSS)** | **465.0 MB** | < 1,024 MB | **EFFICIENT** |
 
 ---
 

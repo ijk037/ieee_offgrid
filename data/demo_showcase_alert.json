@@ -1,0 +1,30 @@
+{
+  "alert_id": "ALERT-DEMO-2021-01-11-ward_184",
+  "severity": "CRITICAL",
+  "title": "Critical Surge: Sanitation & Waste in Uttarahalli (ward_184)",
+  "description": "Observed 18 complaints on 2021-01-11 against a 7-day expected baseline of 0.6 (Surge Delta: +17.4, z-score: 16.2 sigma).",
+  "coordinates": {
+    "latitude": 12.896760085629921,
+    "longitude": 77.53994944901575
+  },
+  "metrics": {
+    "time_window": "2021-01-11",
+    "category": "Sanitation & Waste",
+    "area_id": "ward_184",
+    "observed_count": 18,
+    "expected_count": 0.57,
+    "anomaly_score": 0.8814,
+    "is_anomaly": true,
+    "statistical_evidence": {
+      "rolling_mean_7d": 0.57,
+      "rolling_std_7d": 0.98,
+      "rolling_mean_14d": 0.29,
+      "delta_count": 17.43,
+      "z_score": 16.2,
+      "surge_ratio": 11.46,
+      "day_of_week": 0,
+      "is_weekend": false
+    }
+  },
+  "timestamp": "2026-10-09T18:12:51.017109+00:00"
+}

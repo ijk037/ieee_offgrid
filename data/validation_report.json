@@ -1,0 +1,52 @@
+{
+  "validation_metadata": {
+    "split_date": "2021-06-30",
+    "train_observations": 76033,
+    "test_observations": 17784,
+    "train_date_range": [
+      "2019-01-01",
+      "2021-06-30"
+    ],
+    "test_date_range": [
+      "2021-07-01",
+      "2022-07-31"
+    ]
+  },
+  "metrics": {
+    "train_anomalies_flagged": 1078,
+    "train_anomaly_rate": 0.0142,
+    "test_anomalies_flagged": 188,
+    "test_anomaly_rate": 0.0106,
+    "rate_stability_ratio": 0.746
+  },
+  "edge_case_tests": [
+    {
+      "test_name": "Zero-Variability Edge Case",
+      "passed": true,
+      "is_anomaly": false,
+      "anomaly_score": 0.1006,
+      "notes": "Verified that 0 count with 0 std dev does not trigger anomaly"
+    },
+    {
+      "test_name": "Sparse Series Single Event Edge Case",
+      "passed": true,
+      "is_anomaly": false,
+      "anomaly_score": 0.2768,
+      "notes": "Confirmed single isolated noise complaint is dampened to prevent alert fatigue"
+    },
+    {
+      "test_name": "Controlled Surge Injection Sensitivity",
+      "passed": true,
+      "is_anomaly": true,
+      "anomaly_score": 0.8403,
+      "z_score": 48.75,
+      "notes": "Emergency surge of 20 complaints on baseline 0.5 detected with high confidence"
+    }
+  ],
+  "all_edge_cases_passed": true,
+  "known_limitations": [
+    "Areas with zero historical complaints require at least 2 simultaneous complaints to trigger alerts.",
+    "Sudden city-wide reporting platform campaigns may temporarily elevate complaint counts across multiple categories simultaneously.",
+    "Long holiday weekends may cause delayed Monday surge reporting."
+  ]
+}

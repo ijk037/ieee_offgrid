@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"secondary-fixed-dim":"#4edea3","on-surface":"#e4e1e7","surface-dim":"#131317","secondary-container":"#00a572","tertiary-fixed":"#ffddb8","surface-tint":"#ffb693","on-secondary-container":"#00311f","on-primary":"#561f00","secondary":"#4edea3","on-surface-variant":"#e2bfb0","on-secondary-fixed":"#002113","tertiary-fixed-dim":"#ffb95f","tertiary":"#ffb95f","on-error":"#690005","surface-bright":"#39393d","surface-container-lowest":"#0e0e12","primary-fixed":"#ffdbcc","inverse-primary":"#a04100","outline":"#a98a7d","on-primary-fixed-variant":"#7a3000","primary-container":"#ff6b00","on-tertiary-fixed-variant":"#653e00","on-secondary-fixed-variant":"#005236","error-container":"#93000a","primary":"#ffb693","on-primary-fixed":"#351000","on-primary-container":"#572000","secondary-fixed":"#6ffbbe","on-error-container":"#ffdad6","surface":"#131317","error":"#ffb4ab","inverse-surface":"#e4e1e7","inverse-on-surface":"#303034","surface-container-highest":"#353439","surface-container":"#1f1f23","on-tertiary-fixed":"#2a1700","surface-variant":"#353439","surface-container-high":"#2a292e","surface-container-low":"#1b1b1f","primary-fixed-dim":"#ffb693","outline-variant":"#5a4136","background":"#131317","on-tertiary-container":"#482b00","on-secondary":"#003824","tertiary-container":"#d58800","on-background":"#e4e1e7","on-tertiary":"#472a00"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"space-xl":"2.5rem","margin":"2rem","margin-mobile":"1rem","gutter":"1.25rem","space-sm":"0.5rem","space-lg":"1.5rem","space-xs":"0.25rem","space-md":"1rem","gutter-mobile":"0.75rem"},fontFamily:{"metric-display":["JetBrains Mono"],"headline-sm":["Geist"],"body-lg":["Geist"],"label-mono":["JetBrains Mono"],"body-sm":["Geist"],"headline-xl":["Geist"],"label-mono-sm":["JetBrains Mono"],"headline-md":["Geist"],"headline-lg":["Geist"],"body-md":["Geist"],"headline-xl-mobile":["Geist"],"headline-lg-mobile":["Geist"]},fontSize:{"metric-display":["36px",{"lineHeight":"40px","letterSpacing":"-0.04em","fontWeight":"700"}],"headline-sm":["18px",{"lineHeight":"24px","fontWeight":"500"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"label-mono":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}],"headline-xl":["40px",{"lineHeight":"48px","letterSpacing":"-0.03em","fontWeight":"600"}],"label-mono-sm":["10px",{"lineHeight":"14px","letterSpacing":"0.05em","fontWeight":"500"}],"headline-md":["22px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"500"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"600"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}]}}}};</script></head><body class="bg-background font-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container"><aside class="fixed left-0 top-0 h-screen w-72 bg-surface-container-lowest z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="flex flex-col"><div class="h-20 px-space-md flex items-center gap-space-sm bg-surface-container-low"><img alt="CivicPulse AI Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1U8J9siMhdNSlpgQc8ZT1MuS1df8jl9V7x33TKXPJVTyW6OvaPYkROOPiZSUutBiVxsDDNdoExCI002akrxfClBdCeX1kXPZ_0dvvIGcBM8Z4FpLV4ZSWrg3iCwEeQT4qRVbnvMvhYItyT8826GX5XUzRA9kmurU715pnWmXRvptRiolffhfWL9P7l0TrRVPnA4nPXmM5X8jeij-yHLnqzklLFFgVv6Ckh3VL5uP9Yaefm5LEPhcq8fRw"/><div class="flex flex-col min-w-0"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight truncate font-semibold">CivicPulse AI</span><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase tracking-wider truncate">Command & Intelligence</span></div></div><div class="px-space-md py-space-sm bg-surface-container-lowest"><div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-surface-container-high/60"><span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_rgba(78,222,163,0.8)] animate-pulse"></span><span class="font-label-mono-sm text-label-mono-sm text-secondary truncate">Telemetry Synced • 198 Wards Live</span></div></div><div class="px-space-md pt-space-sm pb-space-xs"><span class="font-label-mono-sm text-label-mono-sm text-outline uppercase tracking-wider">Operational Units</span></div><nav class="flex flex-col gap-space-xs px-space-sm" data-active-classes="bg-surface-container-high text-primary font-medium shadow-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="command-center" href="#"><span class="material-symbols-outlined text-primary">crisis_alert</span><span class="truncate">Command Center</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="spatial-ward-map" href="#"><span class="material-symbols-outlined text-secondary">map</span><span class="truncate">Spatial Ward Map</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg transition-all bg-surface-container-high text-primary font-medium shadow-sm" data-path="civic-ripple-engine" href="#"><span class="material-symbols-outlined text-tertiary">hub</span><span class="truncate">Civic Ripple Engine</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="ward-analytics" href="#"><span class="material-symbols-outlined text-primary-fixed">query_stats</span><span class="truncate">Ward Analytics</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="triage-and-dispatch" href="#"><span class="material-symbols-outlined text-secondary-fixed-dim">send_time_extension</span><span class="truncate">Triage & Dispatch</span></a></nav></div><div class="p-space-md bg-surface-container-lowest flex flex-col gap-space-sm"><div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-label-mono-sm text-label-mono-sm text-outline uppercase">Simulation State</span><span class="w-1.5 h-1.5 rounded-full bg-primary-container shadow-[0_0_6px_rgba(255,107,0,0.8)]"></span></div><button class="w-full flex items-center justify-between px-space-sm py-space-xs rounded bg-surface-container-high hover:bg-surface-container-highest transition-colors"><span class="font-label-mono text-label-mono text-primary font-medium">Live Surge Mode</span><span class="material-symbols-outlined text-primary text-sm">tune</span></button></div><div class="flex items-center justify-between px-space-xs"><span class="font-label-mono-sm text-label-mono-sm text-outline">Grid: Alpha-7 MetSys</span><span class="font-label-mono-sm text-label-mono-sm text-secondary">99.98% High-Avail</span></div></div></aside><div class="pl-72 flex flex-col min-h-screen"><header class="fixed top-0 left-72 right-0 h-20 bg-surface-container-lowest/80 backdrop-blur-xl z-40 shadow-[0_1px_8px_rgba(0,0,0,0.2)]"><div class="w-full h-full px-gutter flex items-center justify-between gap-space-md"><div class="flex-1 max-w-xl"><div class="relative flex items-center w-full"><span class="material-symbols-outlined absolute left-space-md text-outline pointer-events-none text-lg">search</span><input class="w-full h-10 pl-11 pr-space-md rounded-lg bg-surface-container-low text-on-surface placeholder:text-outline font-body-sm text-body-sm transition-all shadow-inner focus:outline-none focus:ring-1 focus:ring-primary-container" placeholder="Search ward number, grievance ID, or spatial cluster..." type="text"/></div></div><div class="flex items-center gap-space-md shrink-0"><div class="hidden lg:flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-primary-container/15"><span class="w-2 h-2 rounded-full bg-primary-container animate-ping"></span><span class="font-label-mono text-label-mono text-primary font-semibold tracking-wider uppercase">DEFCON 2 / ELEVATED</span></div><button class="relative p-space-sm rounded-lg bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-xl">notifications</span><span class="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary-container text-on-primary-container font-label-mono-sm text-label-mono-sm font-bold">3</span></button><div class="h-8 w-px bg-surface-container-high"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="relative"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-primary/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2_C7-3ATgwQGSgxXWXQi_t_LaFJ0iFdxtKsrvKA6vdZL20AbpfheahDLd7Zy_4LwAVm36TuC87TEYf7QeIUpDpUB_Mm5hVvy-krx3pD3fHBWT-BM5XDT7iomzr9nIow8VfM0iWK6T0k-fqTSNjegfYyHoDdh-vpfTpFGmeL65p16Uc2ZURBvy6MJjpH0k0Lya0QetffJ6nDBtYLWvISz2WztIK7drU-bJeRg0z1s9t7bmpm-A5HIJ"/><span class="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-secondary ring-1 ring-surface-container-lowest"></span></div><div class="hidden xl:flex flex-col text-left"><span class="font-body-md text-body-md text-on-surface font-medium leading-tight">Dir. Marcus Vance</span><span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant leading-tight">City Operations Exec</span></div></div></div></div></header><main class="w-full flex-1 pt-20 bg-background px-gutter py-space-lg"><div class="flex flex-col w-full">
+<!-- Page Context & Spatial Telemetry Header -->
+<section class="flex flex-col gap-space-md mb-space-lg">
+<div class="flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs font-label-mono-sm text-label-mono-sm text-outline uppercase tracking-widest">
+<span>CivicPulse AI</span>
+<span>/</span>
+<span class="text-on-surface-variant">Predictive Governance</span>
+<span>/</span>
+<span class="text-primary font-bold">Civic Ripple Engine</span>
+</div>
+<div class="flex items-center gap-space-xs px-space-md py-1 rounded-full bg-surface-container-high shadow-inner">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_rgba(78,222,163,0.9)] animate-pulse"></span>
+<span class="font-label-mono-sm text-label-mono-sm text-secondary font-medium">Spatial-Temporal GNN Model: v4.2 Active</span>
+<span class="text-outline text-xs">•</span>
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">Confidence: <span class="text-on-surface font-semibold">91.4%</span></span>
+</div>
+</div>
+<div class="flex flex-col xl:flex-row xl:items-end justify-between gap-space-md">
+<div class="max-w-4xl flex flex-col gap-1">
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">
+          Time-Lagged Spatial Spillover & Cascade Predictor
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          Proprietary algorithmic model projecting how localized municipal infrastructure breaches radiate across topological gradients, drainage networks, and arterial traffic routes over a 24–72 hour threshold.
+        </p>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-mono text-label-mono transition-all" id="runSimBtn">
+<span class="material-symbols-outlined text-base text-tertiary">autorenew</span>
+<span>Re-simulate GNN</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-primary-container text-on-primary-container font-label-mono text-label-mono font-bold hover:brightness-110 shadow-[0_0_20px_-4px_rgba(255,107,0,0.45)] transition-all">
+<span class="material-symbols-outlined text-base">emergency_share</span>
+<span>Dispatch Cascade Alert</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Interactive Cascade Control Panel -->
+<section class="bg-surface-container-low rounded-xl p-space-md shadow-md mb-space-lg">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-space-md items-center">
+<!-- Incident Selector -->
+<div class="md:col-span-5 flex flex-col gap-1">
+<label class="font-label-mono-sm text-label-mono-sm text-outline uppercase tracking-wider" for="incidentSelect">
+          Trigger Incident Source (Origin Vector)
+        </label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-space-sm top-2.5 text-primary-container text-lg pointer-events-none">warning</span>
+<select class="w-full h-11 pl-9 pr-8 bg-surface-container rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-1 focus:ring-primary-container appearance-none cursor-pointer" id="incidentSelect">
+<option selected="" value="CP-8842">[INCIDENT #CP-8842] Ward 161 Water Main Rupture (Origin)</option>
+<option value="CP-8819">[INCIDENT #CP-8819] Ward 142 Substation Grid Dropout</option>
+<option value="CP-8790">[INCIDENT #CP-8790] Ward 198 Solid Waste Transfer Blockade</option>
+</select>
+<span class="material-symbols-outlined absolute right-space-sm top-3 text-outline text-base pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Proximity Distance Horizon Slider -->
+<div class="md:col-span-4 flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<label class="font-label-mono-sm text-label-mono-sm text-outline uppercase tracking-wider" for="distanceSlider">
+            Proximity Distance Horizon
+          </label>
+<span class="font-label-mono text-label-mono text-primary font-bold" id="sliderValue">2.3 km</span>
+</div>
+<div class="h-11 px-space-sm flex items-center bg-surface-container rounded-lg">
+<input class="w-full accent-primary-container cursor-pointer bg-surface-container-highest rounded-full h-1.5" id="distanceSlider" max="10.0" min="1.0" step="0.1" type="range" value="2.3"/>
+</div>
+</div>
+<!-- Forecast Window Selector -->
+<div class="md:col-span-3 flex flex-col gap-1">
+<span class="font-label-mono-sm text-label-mono-sm text-outline uppercase tracking-wider">
+          Temporal Window
+        </span>
+<div class="grid grid-cols-4 bg-surface-container p-1 rounded-lg gap-1 h-11 items-center">
+<button class="forecast-btn text-center font-label-mono-sm text-label-mono-sm py-1.5 rounded text-outline hover:text-on-surface transition-colors" data-hours="12">12h</button>
+<button class="forecast-btn text-center font-label-mono-sm text-label-mono-sm py-1.5 rounded bg-surface-container-high text-primary font-bold shadow-sm" data-hours="24">24h</button>
+<button class="forecast-btn text-center font-label-mono-sm text-label-mono-sm py-1.5 rounded text-outline hover:text-on-surface transition-colors" data-hours="48">48h</button>
+<button class="forecast-btn text-center font-label-mono-sm text-label-mono-sm py-1.5 rounded text-outline hover:text-on-surface transition-colors" data-hours="72">72h</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Primary Visual Cascade Engine Chain -->
+<section class="bg-surface-container-low rounded-xl p-space-lg shadow-xl mb-space-lg relative overflow-hidden">
+<div class="absolute -right-20 -top-20 w-96 h-96 rounded-full bg-primary-container/5 blur-3xl pointer-events-none"></div>
+<div class="absolute left-1/3 -bottom-24 w-80 h-80 rounded-full bg-secondary/5 blur-3xl pointer-events-none"></div>
+<div class="flex flex-wrap items-center justify-between gap-space-sm mb-space-lg">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary-container text-2xl">account_tree</span>
+<div class="flex flex-col">
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold">
+            Ripple Path Timeline & Cascade Chain
+          </h2>
+<span class="font-label-mono-sm text-label-mono-sm text-outline uppercase">
+            Topographic Gradient Vectorization • Multi-Echelon Ward Impact
+          </span>
+</div>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">Confirmed Origin</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">Active Spillover</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">GNN Projected</span>
+</div>
+</div>
+</div>
+<!-- Vertical / Horizontal Node Flow Grid -->
+<div class="flex flex-col gap-space-md">
+<!-- Node 1: Origin -->
+<div class="relative bg-surface-container rounded-xl p-space-md shadow-md hover:bg-surface-container-high/60 transition-all">
+<div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-primary-container/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary-container text-2xl">water_damage</span>
+</div>
+<div class="flex flex-col">
+<div class="flex flex-wrap items-center gap-space-xs mb-1">
+<span class="px-2 py-0.5 rounded font-label-mono-sm text-label-mono-sm bg-primary-container text-on-primary-container font-bold uppercase tracking-wider">
+                  Origin (T+0h)
+                </span>
+<span class="font-label-mono text-label-mono text-primary font-semibold">Ward 161 (Kengeri)</span>
+<span class="font-label-mono-sm text-label-mono-sm text-outline">Grid Ref: KG-161-NW</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold mb-1">
+                Pressurized 900mm Water Main Burst at Mysore Road Junction
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Downstream Impact: Overland high-pressure runoff channeled along natural gradient into primary culvert corridor, causing soil saturation under arterial transit lanes.
+              </p>
+</div>
+</div>
+<div class="flex items-center gap-space-lg shrink-0 self-end lg:self-center">
+<div class="flex flex-col items-end">
+<span class="font-label-mono-sm text-label-mono-sm text-outline uppercase">Grievance Surge</span>
+<span class="font-metric-display text-metric-display text-primary-container font-bold leading-tight">32</span>
+<span class="font-label-mono-sm text-label-mono-sm text-error font-medium">Severity: CRITICAL</span>
+</div>
+<div class="h-10 w-px bg-surface-container-highest"></div>
+<div class="flex flex-col items-end">
+<span class="font-label-mono-sm text-label-mono-sm text-outline uppercase">Flow State</span>
+<span class="font-label-mono text-label-mono text-on-surface font-bold">1,820 L/min</span>
+<span class="font-label-mono-sm text-label-mono-sm text-secondary font-medium">Capped @ 04:15 AM</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Directional Connector 1 -->
+<div class="flex items-center justify-between px-space-lg py-1">
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container-high text-primary-container">
+<span class="material-symbols-outlined text-sm animate-bounce">arrow_downward</span>
+</div>
+<div class="flex items-center gap-space-xs font-label-mono-sm text-label-mono-sm text-outline">
+<span class="text-primary font-bold">Spatial Vector Delta:</span>
+<span>Distance: 2.3 km</span>
+<span>•</span>
+<span class="text-on-surface">Surface runoff slope gradient: <span class="text-primary-container font-mono font-semibold">-3.8%</span></span>
+</div>
+</div>
+<div class="hidden sm:flex items-center gap-2 font-label-mono-sm text-label-mono-sm text-outline">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+<span>Hydraulic Delay: 19h 22m</span>
+</div>
+</div>
+<!-- Node 2: Spillover Active -->
+<div class="relative bg-surface-container rounded-xl p-space-md shadow-md hover:bg-surface-container-high/60 transition-all">
+<div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-tertiary/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-tertiary text-2xl">replace_image</span>
+</div>
+<div class="flex flex-col">
+<div class="flex flex-wrap items-center gap-space-xs mb-1">
+<span class="px-2 py-0.5 rounded font-label-mono-sm text-label-mono-sm bg-tertiary-container text-on-tertiary-container font-bold uppercase tracking-wider">
+                  Cascade Spillover (T+24h)
+                </span>
+<span class="font-label-mono text-label-mono text-tertiary font-semibold">Ward 184 (Uttarahalli)</span>
+<span class="font-label-mono-sm text-label-mono-sm text-outline">Grid Ref: UT-184-SE</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold mb-1">
+                Road Subsidence & Underground Drainage Silt Influx
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Downstream Impact: Saturated sub-base triggered 400mm roadway drop; 6 waste collection tippers blocked from ward transfer hub. Uncollected refuse spilling to pedestrian corridors.
+              </p>
+</div>
+</div>
+<div class="flex items-center gap-space-lg shrink-0 self-end lg:self-center">
+<div class="flex flex-col items-end">
+<span class="font-label-mono-sm text-label-mono-sm text-outline uppercase">Active Complaints</span>
+<span class="font-metric-display text-metric-display text-tertiary font-bold leading-tight">18</span>
+<span class="font-label-mono-sm text-label-mono-sm text-primary font-medium">Anomaly: +16.2σ</span>
+</div>
+<div class="h-10 w-px bg-surface-container-highest"></div>
+<div class="flex flex-col items-end">
+<span class="font-label-mono-sm text-label-mono-sm text-outline uppercase">Transfer Halt</span>
+<span class="font-label-mono text-label-mono text-error font-bold">14.2 Tons</span>
+<span class="font-label-mono-sm text-label-mono-sm text-outline">Waste Bottleneck</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Directional Connector 2 -->
+<div class="flex items-center justify-between px-space-lg py-1">
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container-high text-secondary">
+<span class="material-symbols-outlined text-sm animate-bounce">arrow_downward</span>
+</div>
+<div class="flex items-center gap-space-xs font-label-mono-sm text-label-mono-sm text-outline">
+<span class="text-secondary font-bold">Cascade Vector:</span>
+<span>Distance: 1.8 km</span>
+<span>•</span>
+<span class="text-on-surface">Secondary traffic diversion overload along 80ft Outer Ring Connector</span>
+</div>
+</div>
+<div class="hidden sm:flex items-center gap-2 font-label-mono-sm text-label-mono-sm text-outline">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>Projected Impact: T+48h Window</span>
+</div>
+</div>
+<!-- Node 3: Predicted Spillover (GNN Target) -->
+<div class="relative bg-surface-container-high rounded-xl p-space-md shadow-xl ring-1 ring-secondary/30 transition-all">
+<div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-secondary-container/30 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary text-2xl">crisis_alert</span>
+</div>
+<div class="flex flex-col">
+<div class="flex flex-wrap items-center gap-space-xs mb-1">
+<span class="px-2 py-0.5 rounded font-label-mono-sm text-label-mono-sm bg-secondary-container text-on-secondary-container font-bold uppercase tracking-wider">
+                  Predicted Spillover (T+48h • 84% Probability)
+                </span>
+<span class="font-label-mono text-label-mono text-secondary font-semibold">Ward 185 (Yelachenahalli)</span>
+<span class="font-label-mono-sm text-label-mono-sm text-outline">Grid Ref: YL-185-CT</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold mb-1">
+                Secondary Traffic Gridlock & Stormwater Backflow Saturation
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Anticipated Grievance Surge: +24 complaints forecasted if Ward 184 transfer route remains impeded. Culverts running at 114% design tolerance under forecasted cloud cover.
+              </p>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-start sm:items-center gap-space-md shrink-0 self-end lg:self-center">
+<div class="flex flex-col items-end">
+<span class="font-label-mono-sm text-label-mono-sm text-outline uppercase">Forecast Vol.</span>
+<span class="font-metric-display text-metric-display text-secondary font-bold leading-tight">+24</span>
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface-variant">Expected Complaints</span>
+</div>
+<button class="flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-primary-container text-on-primary-container font-label-mono text-label-mono font-bold hover:brightness-110 shadow-[0_0_16px_-2px_rgba(255,107,0,0.5)] transition-all">
+<span class="material-symbols-outlined text-base">alt_route</span>
+<span>Deploy Pre-emptive Drainage & Rerouting</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Risk Forecast & Adjacent Wards At-Risk Matrix -->
+<section class="flex flex-col gap-space-md mb-space-lg">
+<div class="flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex flex-col">
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold tracking-tight">
+          Adjacent Wards At-Risk Matrix
+        </h2>
+<span class="font-label-mono-sm text-label-mono-sm text-outline uppercase">
+          Dynamic GNN Proximity Assessment & Intercept Windows
+        </span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-mono-sm text-label-mono-sm text-outline">Sort by:</span>
+<span class="font-label-mono text-label-mono text-primary font-semibold">Decay-Weighted Severity</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Matrix Card 1 -->
+<div class="flex flex-col justify-between bg-surface-container-low rounded-xl p-space-md shadow-md hover:bg-surface-container transition-all">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+<span class="font-label-mono text-label-mono text-on-surface font-bold">Ward 185 (Yelachenahalli)</span>
+</div>
+<span class="px-2 py-0.5 rounded font-label-mono-sm text-label-mono-sm bg-primary-container/20 text-primary font-bold">
+              84% Risk
+            </span>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container">
+<div class="flex justify-between items-center mb-1">
+<span class="font-label-mono-sm text-label-mono-sm text-outline">Intercept Window</span>
+<span class="font-label-mono text-label-mono text-primary-container font-bold">< 18h remaining</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary-container h-full rounded-full" style="width: 78%;"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-mono-sm text-label-mono-sm text-outline uppercase">Projected Breach Vectors</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Stormwater backflow along culvert branch 4B and heavy feeder arterial logjam. 1,400 vehicles displaced.
+            </p>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-mono-sm text-label-mono-sm text-outline">Grievance Risk</span>
+<span class="font-label-mono text-label-mono text-error font-bold">+24 Tickets</span>
+</div>
+<button class="px-space-md py-space-xs rounded bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-on-surface font-label-mono text-label-mono font-medium transition-colors">
+            Issue Pre-emptive Work Order
+          </button>
+</div>
+</div>
+<!-- Matrix Card 2 -->
+<div class="flex flex-col justify-between bg-surface-container-low rounded-xl p-space-md shadow-md hover:bg-surface-container transition-all">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-label-mono text-label-mono text-on-surface font-bold">Ward 160 (RR Nagar)</span>
+</div>
+<span class="px-2 py-0.5 rounded font-label-mono-sm text-label-mono-sm bg-tertiary/20 text-tertiary font-bold">
+              67% Risk
+            </span>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container">
+<div class="flex justify-between items-center mb-1">
+<span class="font-label-mono-sm text-label-mono-sm text-outline">Intercept Window</span>
+<span class="font-label-mono text-label-mono text-tertiary font-bold">< 26 hours</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 54%;"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-mono-sm text-label-mono-sm text-outline uppercase">Projected Breach Vectors</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Potable water distribution deficit. Pressure drop across 3 residential sectors due to upstream valving isolation.
+            </p>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-mono-sm text-label-mono-sm text-outline">Grievance Risk</span>
+<span class="font-label-mono text-label-mono text-tertiary font-bold">+14 Tickets</span>
+</div>
+<button class="px-space-md py-space-xs rounded bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-on-surface font-label-mono text-label-mono font-medium transition-colors">
+            Deploy Water Tankers
+          </button>
+</div>
+</div>
+<!-- Matrix Card 3 -->
+<div class="flex flex-col justify-between bg-surface-container-low rounded-xl p-space-md shadow-md hover:bg-surface-container transition-all">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-mono text-label-mono text-on-surface font-bold">Ward 197 (Vasanthpura)</span>
+</div>
+<span class="px-2 py-0.5 rounded font-label-mono-sm text-label-mono-sm bg-secondary/20 text-secondary font-bold">
+              38% Risk
+            </span>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container">
+<div class="flex justify-between items-center mb-1">
+<span class="font-label-mono-sm text-label-mono-sm text-outline">Intercept Window</span>
+<span class="font-label-mono text-label-mono text-secondary font-bold">Monitored / Stable</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 25%;"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-mono-sm text-label-mono-sm text-outline uppercase">Projected Breach Vectors</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Peripheral transit delays on bus route #210G. Minor runoff dissipation before reaching residential boundary.
+            </p>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-mono-sm text-label-mono-sm text-outline">Grievance Risk</span>
+<span class="font-label-mono text-label-mono text-secondary font-bold">+5 Tickets</span>
+</div>
+<button class="px-space-md py-space-xs rounded bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container text-on-surface font-label-mono text-label-mono font-medium transition-colors">
+            Set Spatial Watch
+          </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Preventative Governance Impact Metrics & Topological Map View -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-space-md">
+<!-- Visual Geographic Spillover Heatmap Tile -->
+<div class="lg:col-span-7 bg-surface-container-low rounded-xl p-space-md shadow-md flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-xl">layers</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-medium">Topological Spillover Contour</span>
+</div>
+<span class="font-label-mono-sm text-label-mono-sm text-outline">Satellite Elevation Layer Active</span>
+</div>
+<div class="relative w-full h-64 rounded-lg overflow-hidden bg-surface-container">
+<!-- Interactive Spatial Map Container -->
+<div class="w-full h-full bg-cover bg-center" data-location="Kengeri, Bengaluru, Karnataka, India" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCuGr6sJSQOXJvuEgABhN1rPHn8ywjlQa-Z1lvqDvIp4xmt2seWK0NL-_0U4Pp3XOLDHeIK2dh83pyyXRVL-X6WKYFzGwsMTHdsJGwA1ewaadTyr3bzcuvbQGSDXwIhm8preFE2F7tRV68zZFgUqjEaLOig2h-QuSGHQDg_pKVimPXzM_Zq2-jRW7TUcMfdrDKlhAAH0sgfB839pbkGhpk6CRQxHdvgRPkNXG2KYS-KrNUm08lw7rLr')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent pointer-events-none"></div>
+<!-- Spatial Vectors Overlay HUD -->
+<div class="absolute bottom-space-sm left-space-sm right-space-sm flex items-center justify-between bg-surface-container-lowest/80 backdrop-blur-md p-space-sm rounded-lg">
+<div class="flex items-center gap-space-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container animate-ping"></span>
+<div class="flex flex-col">
+<span class="font-label-mono-sm text-label-mono-sm text-on-surface font-bold">Runoff Vector #R-16</span>
+<span class="font-label-mono-sm text-label-mono-sm text-outline">2.3km @ 1.4 m/s velocity</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded font-label-mono-sm text-label-mono-sm bg-surface-container text-secondary font-mono">Topography: -3.8%</span>
+<span class="px-2 py-0.5 rounded font-label-mono-sm text-label-mono-sm bg-surface-container text-primary-container font-mono">Saturation: 89%</span>
+</div>
+</div>
+</div>
+<div class="mt-space-sm flex items-center justify-between font-label-mono-sm text-label-mono-sm text-outline">
+<span>Coordinate Datum: WGS84 MetSys-Alpha</span>
+<span class="text-secondary font-medium">Telemetry: 1.2s Real-Time Polling</span>
+</div>
+</div>
+<!-- Preventative Governance Impact Metrics Card -->
+<div class="lg:col-span-5 bg-surface-container-low rounded-xl p-space-md shadow-md flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary-container text-xl">savings</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-medium">Preventive Impact Metrics</span>
+</div>
+<span class="font-label-mono-sm text-label-mono-sm text-secondary font-bold">ROI Factor: 6.8x</span>
+</div>
+<div class="flex flex-col gap-space-md">
+<!-- Metric 1: Prevented Complaints Ratio -->
+<div class="p-space-md rounded-lg bg-surface-container flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-mono-sm text-label-mono-sm text-outline uppercase tracking-wider">
+              Prevented Grievance Ratio
+            </span>
+<span class="font-label-mono-sm text-label-mono-sm text-secondary font-bold">Target > 35%</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-metric-display text-metric-display text-secondary font-bold">41%</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">average ticket suppression</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-snug">
+            Achieved when pre-emptive intercept actions are executed within 6 hours of primary trigger anomaly.
+          </p>
+</div>
+<!-- Metric 2: Estimated Fiscal Savings -->
+<div class="p-space-md rounded-lg bg-surface-container flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-mono-sm text-label-mono-sm text-outline uppercase tracking-wider">
+              Emergency Infrastructure Preservation
+            </span>
+<span class="font-label-mono-sm text-label-mono-sm text-primary font-bold">Estimated Cost Savings</span>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-metric-display text-metric-display text-primary font-bold">$48,200</span>
+<span class="font-label-mono text-label-mono text-outline font-medium">/ ₹38.4L</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-snug">
+            Averted emergency roadway reconstruction, secondary culvert blowouts, and industrial disruption claims.
+          </p>
+</div>
+</div>
+<!-- Action Footer -->
+<div class="mt-space-md pt-space-sm flex items-center justify-between">
+<div class="flex items-center gap-1.5 font-label-mono-sm text-label-mono-sm text-outline">
+<span class="material-symbols-outlined text-sm text-secondary">verified</span>
+<span>Verified by Metropolitan Audit Bureau</span>
+</div>
+<button class="px-space-md py-space-xs rounded bg-surface-container-high hover:bg-surface-container-highest text-primary font-label-mono text-label-mono font-medium transition-colors">
+          Download Ripple Audit
+        </button>
+</div>
+</div>
+</section>
+<!-- Interactive Controls Client-Side Logic -->
+<script>
+    (function initRippleControls() {
+      const slider = document.getElementById('distanceSlider');
+      const sliderVal = document.getElementById('sliderValue');
+      const forecastButtons = document.querySelectorAll('.forecast-btn');
+      const runSimBtn = document.getElementById('runSimBtn');
+
+      if (slider && sliderVal) {
+        slider.addEventListener('input', (e) => {
+          sliderVal.textContent = parseFloat(e.target.value).toFixed(1) + ' km';
+        });
+      }
+
+      forecastButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          forecastButtons.forEach((b) => {
+            b.classList.remove('bg-surface-container-high', 'text-primary', 'font-bold', 'shadow-sm');
+            b.classList.add('text-outline');
+          });
+          btn.classList.add('bg-surface-container-high', 'text-primary', 'font-bold', 'shadow-sm');
+          btn.classList.remove('text-outline');
+        });
+      });
+
+      if (runSimBtn) {
+        runSimBtn.addEventListener('click', () => {
+          const originalText = runSimBtn.innerHTML;
+          runSimBtn.innerHTML = '<span class="material-symbols-outlined text-base animate-spin text-tertiary">rotate_right</span><span>Computing GNN Paths...</span>';
+          setTimeout(() => {
+            runSimBtn.innerHTML = originalText;
+          }, 800);
+        });
+      }
+    })();
+  </script>
+</div></main></div></body></html>

@@ -1,0 +1,133 @@
+[
+  {
+    "time_window": "2026-10-08 08:00 - 12:00",
+    "category": "Water Infrastructure",
+    "area_id": "Ward 12 — Riverside",
+    "observed_count": 642,
+    "expected_count": 180.0,
+    "anomaly_score": 4.85,
+    "is_anomaly": true,
+    "statistical_evidence": {
+      "z_score": 4.85,
+      "p_value": 0.0001,
+      "latitude": 28.6250,
+      "longitude": 77.2150
+    }
+  },
+  {
+    "time_window": "2026-10-08 08:00 - 12:00",
+    "category": "Drainage Backflow",
+    "area_id": "Ward 12 — Riverside",
+    "observed_count": 310,
+    "expected_count": 95.0,
+    "anomaly_score": 3.75,
+    "is_anomaly": true,
+    "statistical_evidence": {
+      "z_score": 3.75,
+      "p_value": 0.0008,
+      "latitude": 28.6260,
+      "longitude": 77.2160
+    }
+  },
+  {
+    "time_window": "2026-10-09 14:00 - 18:00",
+    "category": "Health & Sanitation Contamination",
+    "area_id": "Ward 12 — Riverside",
+    "observed_count": 420,
+    "expected_count": 110.0,
+    "anomaly_score": 4.30,
+    "is_anomaly": true,
+    "statistical_evidence": {
+      "z_score": 4.30,
+      "p_value": 0.0002,
+      "latitude": 28.6270,
+      "longitude": 77.2140
+    }
+  },
+  {
+    "time_window": "2026-10-08 18:00 - 22:00",
+    "category": "Streetlight Outage Cluster",
+    "area_id": "Ward 04 — Old Town",
+    "observed_count": 398,
+    "expected_count": 160.0,
+    "anomaly_score": 3.20,
+    "is_anomaly": true,
+    "statistical_evidence": {
+      "z_score": 3.20,
+      "p_value": 0.002,
+      "latitude": 28.5800,
+      "longitude": 77.2400
+    }
+  },
+  {
+    "time_window": "2026-10-08 18:00 - 22:00",
+    "category": "Traffic Signal Malfunction",
+    "area_id": "Ward 04 — Old Town",
+    "observed_count": 245,
+    "expected_count": 115.0,
+    "anomaly_score": 2.75,
+    "is_anomaly": true,
+    "statistical_evidence": {
+      "z_score": 2.75,
+      "p_value": 0.008,
+      "latitude": 28.5820,
+      "longitude": 77.2410
+    }
+  },
+  {
+    "time_window": "2026-10-08 12:00 - 16:00",
+    "category": "Road Flooding",
+    "area_id": "Ward 27 — Lakeview",
+    "observed_count": 211,
+    "expected_count": 65.0,
+    "anomaly_score": 3.45,
+    "is_anomaly": true,
+    "statistical_evidence": {
+      "z_score": 3.45,
+      "p_value": 0.0015,
+      "latitude": 28.5355,
+      "longitude": 77.3910
+    }
+  },
+  {
+    "time_window": "2026-10-09 18:00 - 22:00",
+    "category": "Pothole Hazards",
+    "area_id": "Ward 27 — Lakeview",
+    "observed_count": 185,
+    "expected_count": 75.0,
+    "anomaly_score": 2.90,
+    "is_anomaly": true,
+    "statistical_evidence": {
+      "z_score": 2.90,
+      "p_value": 0.006,
+      "latitude": 28.5380,
+      "longitude": 77.3930
+    }
+  },
+  {
+    "time_window": "2026-10-08 08:00 - 12:00",
+    "category": "Waste Accumulation",
+    "area_id": "Ward 31 — Greenfield",
+    "observed_count": 154,
+    "expected_count": 145.0,
+    "anomaly_score": 0.45,
+    "is_anomaly": false,
+    "statistical_evidence": {
+      "z_score": 0.45,
+      "p_value": 0.65
+    }
+  },
+  {
+    "time_window": "2026-10-08 12:00 - 16:00",
+    "category": "Sanitation Routine",
+    "area_id": "Ward 08 — Central District",
+    "observed_count": 112,
+    "expected_count": 110.0,
+    "anomaly_score": 0.15,
+    "is_anomaly": false,
+    "statistical_evidence": {
+      "z_score": 0.15,
+      "p_value": 0.88
+    }
+  }
+]

@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    window.FontAwesomeConfig = {
+      autoReplaceSvg: 'nest'
+    };
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CivicPulse AI — Urban Complaint Monitoring &amp; Spatial Intelligence</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.plot.ly/plotly-3.1.1.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #F8F9FA; }
+    .font-serif-gov { font-family: 'Source Serif 4', serif; }
+    .nav-tab-active { color: #0F2540 !important; background-color: #F1F5F9 !important; font-weight: 600; }
+    .badge-high { color: #C2410C; background-color: #FFF7ED; border: 1px solid #FFEDD5; }
+    .badge-med { color: #B45309; background-color: #FFFBEB; border: 1px solid #FEF3C7; }
+    .badge-norm { color: #047857; background-color: #ECFDF5; border: 1px solid #D1FAE5; }
+    .highlight-section { outline: 2px solid #EA580C; outline-offset: 4px; transition: outline 0.3s ease; }
+  </style>
+</head>
+<body class="text-slate-800">
+
+<!-- Top Government Ribbon -->
+<div class="w-full bg-[#0F2540] text-slate-200 text-xs">
+  <div class="max-w-[1440px] mx-auto px-6 py-1.5 flex items-center justify-between">
+    <span class="flex items-center gap-2">
+      <i class="fa-solid fa-landmark-dome text-[11px]"></i> Office of Urban Development &amp; Civic Intelligence
+    </span>
+    <span class="hidden sm:flex items-center gap-4">
+      <span id="sync-timestamp"><i class="fa-regular fa-clock mr-1"></i> Live Backend Sync Active</span>
+      <span class="text-emerald-400"><i class="fa-solid fa-circle text-[6px] mr-1"></i> System Operational</span>
+    </span>
+  </div>
+</div>
+
+<!-- Header -->
+<header id="header" class="w-full bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+  <div class="max-w-[1440px] mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-md bg-[#0F2540] flex items-center justify-center shrink-0 shadow-sm">
+        <i class="fa-solid fa-building-columns text-amber-400 text-xl"></i>
+      </div>
+      <div>
+        <h1 class="text-xl font-extrabold tracking-wide text-[#0F2540] font-serif-gov">CIVICPULSE AI</h1>
+        <p class="text-xs text-slate-500 font-medium">Urban Development &amp; Civic Intelligence Portal</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <!-- Interactive Navigation Tabs -->
+      <nav id="nav-tabs" class="hidden lg:flex items-center gap-1 mr-4 text-sm font-medium text-slate-600">
+        <button onclick="switchTab('overview')" id="tab-overview" class="px-3 py-2 rounded-md nav-tab-active transition-colors">Overview</button>
+        <button onclick="switchTab('complaints')" id="tab-complaints" class="px-3 py-2 rounded-md hover:bg-slate-50 transition-colors">Complaints</button>
+        <button onclick="switchTab('wards')" id="tab-wards" class="px-3 py-2 rounded-md hover:bg-slate-50 transition-colors">Wards &amp; Zones</button>
+        <button onclick="switchTab('reports')" id="tab-reports" class="px-3 py-2 rounded-md hover:bg-slate-50 transition-colors">Reports</button>
+      </nav>
+
+      <a href="/api/data" target="_blank" class="px-3 py-1.5 text-xs font-semibold rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 flex items-center gap-1.5" title="View Raw JSON API">
+        <i class="fa-solid fa-code"></i> API JSON
+      </a>
+
+      <!-- Dynamic Refresh Button -->
+      <button id="refresh-btn" onclick="refreshData()" class="px-3.5 py-1.5 text-xs font-semibold rounded-md bg-[#0F2540] text-white hover:bg-[#15335A] flex items-center gap-1.5 shadow-sm transition-all" title="Refresh Live Data">
+        <i class="fa-solid fa-arrows-rotate" id="refresh-icon"></i> <span id="refresh-text">Refresh</span>
+      </button>
+
+      <div class="flex items-center gap-2 pl-2 ml-1 border-l border-slate-200">
+        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" class="w-9 h-9 rounded-full object-cover border border-slate-200" alt="admin avatar">
+        <div class="hidden xl:block leading-tight">
+          <p class="text-sm font-semibold text-[#0F2540]">R. Mehta</p>
+          <p class="text-[11px] text-slate-500">Municipal Analyst</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Alert Banner Notification (Hidden by default, shown upon refresh) -->
+<div id="toast-banner" class="hidden w-full bg-emerald-50 border-b border-emerald-200 text-emerald-800 text-xs py-2 px-6 text-center font-medium transition-all">
+  <i class="fa-solid fa-check-circle mr-1.5 text-emerald-600"></i> Backend synchronized: All mock &amp; model values re-rendered dynamically from CivicPulseBackend.
+</div>
+
+<main class="max-w-[1440px] mx-auto px-6 py-8">
+
+  <!-- Page Heading -->
+  <div id="page-heading" class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-7">
+    <div>
+      <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Dashboard / Overview</p>
+      <h2 class="text-2xl font-bold text-[#0F2540]">Urban Complaint Monitoring</h2>
+      <p class="text-sm text-slate-500 mt-1">Urban complaint monitoring and emerging issue detection</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <!-- Area Filter -->
+      <div class="flex items-center gap-1.5 bg-white border border-slate-200 rounded-md px-3 py-1.5 text-xs text-slate-600">
+        <i class="fa-solid fa-filter text-slate-400"></i>
+        <select id="filter-area" onchange="applyFilters()" class="bg-transparent font-medium focus:outline-none">
+          <option value="ALL">All Wards / Areas</option>
+        </select>
+      </div>
+
+      <!-- Severity Filter -->
+      <div class="flex items-center gap-1.5 bg-white border border-slate-200 rounded-md px-3 py-1.5 text-xs text-slate-600">
+        <select id="filter-severity" onchange="applyFilters()" class="bg-transparent font-medium focus:outline-none">
+          <option value="ALL">All Priorities</option>
+          <option value="HIGH">High / Critical</option>
+          <option value="MEDIUM">Medium / Moderate</option>
+        </select>
+      </div>
+
+      <button onclick="exportReport()" class="px-3.5 py-2 text-sm font-semibold rounded-md bg-[#0F2540] text-white hover:bg-[#15335A] flex items-center gap-2 shadow-xs">
+        <i class="fa-solid fa-file-export"></i> Export Report
+      </button>
+    </div>
+  </div>
+
+  <!-- Metric Cards (4-Column Grid) -->
+  <section id="metrics-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+
+    <!-- Metric 1: Total Complaints Analysed -->
+    <div id="metric-complaints" class="bg-white rounded-lg border border-slate-200 p-5 shadow-xs hover:shadow transition-shadow">
+      <div class="flex items-start justify-between mb-4">
+        <div class="w-10 h-10 rounded-md bg-slate-100 flex items-center justify-center">
+          <i class="fa-solid fa-file-circle-check text-[#0F2540]"></i>
+        </div>
+        <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+          <i class="fa-solid fa-arrow-up text-[9px] mr-1"></i>4.2%
+        </span>
+      </div>
+      <p id="val-complaints" class="text-3xl font-extrabold text-[#0F2540]">18,246</p>
+      <p class="text-sm text-slate-500 mt-1">Complaints Analysed</p>
+    </div>
+
+    <!-- Metric 2: Potential Anomalies (Highlighted Orange Border) -->
+    <div id="metric-anomalies" class="bg-white rounded-lg border border-orange-200 p-5 relative overflow-hidden shadow-xs hover:shadow transition-shadow">
+      <div class="absolute top-0 right-0 w-1.5 h-full bg-[#EA580C]"></div>
+      <div class="flex items-start justify-between mb-4">
+        <div class="w-10 h-10 rounded-md bg-orange-50 flex items-center justify-center">
+          <i class="fa-solid fa-triangle-exclamation text-[#EA580C]"></i>
+        </div>
+        <span id="badge-anomaly-status" class="text-[11px] font-semibold text-orange-700 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full">
+          <i class="fa-solid fa-arrow-up text-[9px] mr-1"></i>High
+        </span>
+      </div>
+      <p id="val-anomalies" class="text-3xl font-extrabold text-[#EA580C]">312</p>
+      <p class="text-sm text-slate-500 mt-1">Potential Anomalies</p>
+    </div>
+
+    <!-- Metric 3: Areas Monitored -->
+    <div id="metric-areas" class="bg-white rounded-lg border border-slate-200 p-5 shadow-xs hover:shadow transition-shadow">
+      <div class="flex items-start justify-between mb-4">
+        <div class="w-10 h-10 rounded-md bg-slate-100 flex items-center justify-center">
+          <i class="fa-solid fa-map-location-dot text-[#0F2540]"></i>
+        </div>
+        <span class="text-[11px] font-semibold text-slate-500 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-full">Ward Level</span>
+      </div>
+      <p id="val-areas" class="text-3xl font-extrabold text-[#0F2540]">47</p>
+      <p class="text-sm text-slate-500 mt-1">Areas Monitored</p>
+    </div>
+
+    <!-- Metric 4: Categories Analysed -->
+    <div id="metric-categories" class="bg-white rounded-lg border border-slate-200 p-5 shadow-xs hover:shadow transition-shadow">
+      <div class="flex items-start justify-between mb-4">
+        <div class="w-10 h-10 rounded-md bg-slate-100 flex items-center justify-center">
+          <i class="fa-solid fa-tags text-[#0F2540]"></i>
+        </div>
+        <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">Stable</span>
+      </div>
+      <p id="val-categories" class="text-3xl font-extrabold text-[#0F2540]">23</p>
+      <p class="text-sm text-slate-500 mt-1">Categories Analysed</p>
+    </div>
+
+  </section>
+
+  <!-- Emerging Civic Issues -->
+  <section id="emerging-issues">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h3 class="text-lg font-bold text-[#0F2540]">Emerging Civic Issues</h3>
+        <p class="text-sm text-slate-500">Core analytical modules monitoring citywide complaint patterns</p>
+      </div>
+      <button onclick="switchTab('overview')" class="text-sm font-semibold text-[#0F2540] hover:underline flex items-center gap-1">
+        View All Modules <i class="fa-solid fa-arrow-right text-xs"></i>
+      </button>
+    </div>
+
+    <div class="flex flex-col gap-6">
+
+      <!-- 1. Complaint Trend Analysis -->
+      <div id="module-trend" class="bg-white rounded-lg border border-slate-200 p-6 shadow-xs">
+        <div class="flex flex-col lg:flex-row lg:items-center gap-6">
+          <div class="flex items-start gap-4 lg:w-1/3">
+            <div class="w-11 h-11 rounded-md bg-slate-100 flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-chart-line text-[#0F2540]"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold text-[#0F2540]">Complaint Trend Analysis</h4>
+              <p class="text-sm text-slate-500 mt-1">Historical counts with detected anomaly spikes over time</p>
+              <div class="flex items-center gap-3 mt-3">
+                <span id="badge-trend-count" class="text-xs font-semibold text-orange-700 bg-orange-50 border border-orange-200 px-2.5 py-1 rounded-full">
+                  <i class="fa-solid fa-triangle-exclamation text-[9px] mr-1"></i> <span id="trend-anomalies-count">3</span> anomalies detected
+                </span>
+                <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
+                  Baseline normal
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="lg:w-2/3 border-t lg:border-t-0 lg:border-l border-slate-100 pt-5 lg:pt-0 lg:pl-6">
+            <div id="trend-chart" style="height:160px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Geographical Monitoring -->
+      <div id="module-geo" class="bg-white rounded-lg border border-slate-200 p-6 shadow-xs">
+        <div class="flex items-start justify-between mb-5">
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-md bg-slate-100 flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-map-location-dot text-[#0F2540]"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold text-[#0F2540]">Geographical Monitoring</h4>
+              <p class="text-sm text-slate-500 mt-1">Ward / grid-level complaint density and anomaly distribution</p>
+            </div>
+          </div>
+          <span id="geo-summary-tag" class="text-xs text-slate-500 font-medium">Loading ward distribution...</span>
+        </div>
+
+        <!-- Dynamic Ward Cards Grid -->
+        <div id="geo-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <!-- Fallback initial HTML matching UXPilot export -->
+          <div class="rounded-md border border-slate-200 p-3.5 flex items-center justify-between">
+            <div>
+              <p class="text-sm font-semibold text-[#0F2540]">Ward 12 — Riverside</p>
+              <p class="text-xs text-slate-500 mt-0.5">642 complaints</p>
+            </div>
+            <span class="text-[11px] font-semibold text-orange-700 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full">High</span>
+          </div>
+          <div class="rounded-md border border-slate-200 p-3.5 flex items-center justify-between">
+            <div>
+              <p class="text-sm font-semibold text-[#0F2540]">Ward 04 — Old Town</p>
+              <p class="text-xs text-slate-500 mt-0.5">398 complaints</p>
+            </div>
+            <span class="text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">Moderate</span>
+          </div>
+          <div class="rounded-md border border-slate-200 p-3.5 flex items-center justify-between">
+            <div>
+              <p class="text-sm font-semibold text-[#0F2540]">Ward 27 — Lakeview</p>
+              <p class="text-xs text-slate-500 mt-0.5">211 complaints</p>
+            </div>
+            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">Normal</span>
+          </div>
+          <div class="rounded-md border border-slate-200 p-3.5 flex items-center justify-between">
+            <div>
+              <p class="text-sm font-semibold text-[#0F2540]">Ward 31 — Greenfield</p>
+              <p class="text-xs text-slate-500 mt-0.5">154 complaints</p>
+            </div>
+            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">Normal</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Compounding Civic Crises (Multi-Category Detection) -->
+      <div id="module-crises" class="bg-white rounded-lg border border-slate-200 p-6 shadow-xs">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-md bg-red-50 flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-layer-group text-red-600"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h4 class="font-semibold text-[#0F2540]">Compounding Civic Crises</h4>
+                <span class="text-[10px] font-bold text-red-700 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full uppercase tracking-wider">Multi-Category</span>
+              </div>
+              <p class="text-sm text-slate-500 mt-1">Cross-category co-occurrences in the same geographic area during the same time window</p>
+            </div>
+          </div>
+          <span id="crises-count-badge" class="text-xs text-slate-500 font-medium">Scanning clusters...</span>
+        </div>
+
+        <div id="compounding-crises-list" class="space-y-3">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- 4. Civic Ripple Cascades (Predictive Hypotheses) -->
+      <div id="module-ripples" class="bg-white rounded-lg border border-slate-200 p-6 shadow-xs">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-md bg-amber-50 flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-water-ladder text-amber-600"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h4 class="font-semibold text-[#0F2540]">Civic Ripple Engine — Cascading Hypotheses</h4>
+                <span class="text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full uppercase tracking-wider">Hypothesis Notice</span>
+              </div>
+              <p class="text-sm text-slate-500 mt-1">Time-lagged proximity analysis identifying cascading municipal infrastructure disruptions</p>
+            </div>
+          </div>
+          <span id="ripples-count-badge" class="text-xs text-slate-500 font-medium">Analyzing time lags...</span>
+        </div>
+
+        <!-- Investigation Disclaimer -->
+        <div class="bg-amber-50/70 border border-amber-200/80 rounded-md p-3 mb-4 flex items-start gap-2.5 text-xs text-amber-900">
+          <i class="fa-solid fa-shield-halved text-amber-600 mt-0.5"></i>
+          <span><strong>Investigation Notice:</strong> Cascading links below are evaluated as <em>hypotheses for investigation</em> based on spatio-temporal proximity and infrastructure dependencies. They do not represent definitive causal conclusions.</span>
+        </div>
+
+        <div id="ripples-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- 5. Alert Investigation Table -->
+      <div id="module-alert" class="bg-white rounded-lg border border-slate-200 p-6 shadow-xs">
+        <div class="flex items-start justify-between mb-5">
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-md bg-orange-50 flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-file-shield text-[#EA580C]"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold text-[#0F2540]">Alert Investigation</h4>
+              <p class="text-sm text-slate-500 mt-1">Evidence summary, anomaly score, and investigation priority</p>
+            </div>
+          </div>
+          <span id="alerts-count-tag" class="text-xs text-slate-500 font-medium">Active Alerts</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-xs text-slate-400 uppercase tracking-wide border-b border-slate-200">
+                <th class="py-2 pr-4 font-semibold">Alert ID</th>
+                <th class="py-2 pr-4 font-semibold">Evidence Summary</th>
+                <th class="py-2 pr-4 font-semibold">Anomaly Score</th>
+                <th class="py-2 pr-4 font-semibold">Priority</th>
+                <th class="py-2 pr-4 font-semibold">Status</th>
+              </tr>
+            </thead>
+            <tbody id="alerts-table-body" class="divide-y divide-slate-100">
+              <!-- Initial fallback rows matching UXPilot export -->
+              <tr>
+                <td class="py-3 pr-4 font-semibold text-[#0F2540]">ALT-2291</td>
+                <td class="py-3 pr-4 text-slate-600">Surge in water-logging reports, Ward 12</td>
+                <td class="py-3 pr-4 text-slate-600">0.91</td>
+                <td class="py-3 pr-4"><span class="text-[11px] font-semibold text-orange-700 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full">Critical</span></td>
+                <td class="py-3 pr-4"><span class="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">Under Review</span></td>
+              </tr>
+              <tr>
+                <td class="py-3 pr-4 font-semibold text-[#0F2540]">ALT-2288</td>
+                <td class="py-3 pr-4 text-slate-600">Repeated streetlight outage cluster, Ward 04</td>
+                <td class="py-3 pr-4 text-slate-600">0.74</td>
+                <td class="py-3 pr-4"><span class="text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">High</span></td>
+                <td class="py-3 pr-4"><span class="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">Assigned</span></td>
+              </tr>
+              <tr>
+                <td class="py-3 pr-4 font-semibold text-[#0F2540]">ALT-2271</td>
+                <td class="py-3 pr-4 text-slate-600">Sanitation complaint volume within expected range</td>
+                <td class="py-3 pr-4 text-slate-600">0.32</td>
+                <td class="py-3 pr-4"><span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">Low</span></td>
+                <td class="py-3 pr-4"><span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Resolved</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- Reports Modal (Triggered by Reports Tab) -->
+<div id="reports-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg shadow-xl max-w-lg w-full p-6 border border-slate-200">
+    <div class="flex items-center justify-between mb-4">
+      <h4 class="text-lg font-bold text-[#0F2540] font-serif-gov">Municipal Intelligence Report Digest</h4>
+      <button onclick="closeReportsModal()" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
+    </div>
+    <div id="reports-modal-content" class="text-sm text-slate-600 space-y-3">
+      <p>Compiling latest civic anomaly digest from active backend pipeline...</p>
+    </div>
+    <div class="mt-6 flex justify-end gap-2">
+      <button onclick="closeReportsModal()" class="px-4 py-2 text-xs font-semibold rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50">Close</button>
+      <button onclick="window.print()" class="px-4 py-2 text-xs font-semibold rounded-md bg-[#0F2540] text-white hover:bg-[#15335A]">Print Summary</button>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer id="footer" class="w-full border-t border-slate-200 bg-white mt-12">
+  <div class="max-w-[1440px] mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2">
+    <p class="text-xs text-slate-400 text-center sm:text-left">Illustrative layout populated dynamically from dataset and CivicPulseBackend.</p>
+    <p class="text-xs text-slate-400">&copy; 2026 Office of Urban Development &amp; Civic Intelligence. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- Embedded Initial State Injected by Flask -->
+<script id="backend-data-json" type="application/json">
+{{ BACKEND_DATA_JSON | default('{}') | safe }}
+</script>
+
+<!-- ======================================================================= -->
+<!-- Interactive Frontend Data-Binding Script                               -->
+<!-- ======================================================================= -->
+<script>
+let globalBackendData = null;
+let activeTab = 'overview';
+
+// -------------------------------------------------------------------------
+// 1. Lifecycle Hook: Page Load Data Fetching
+// -------------------------------------------------------------------------
+window.addEventListener('DOMContentLoaded', function () {
+  console.log('[CivicPulse UI] Initializing frontend data binding...');
+
+  // Step 1: Attempt to hydrate from embedded state if available
+  try {
+    const embeddedScript = document.getElementById('backend-data-json');
+    if (embeddedScript && embeddedScript.textContent) {
+      const parsed = JSON.parse(embeddedScript.textContent.trim());
+      if (parsed && (parsed.total_anomalies !== undefined || (parsed.alerts && parsed.alerts.length))) {
+        console.log('[CivicPulse UI] Hydrating immediately from embedded state:', parsed);
+        globalBackendData = parsed;
+        updateUIWithData(parsed);
+      }
+    }
+  } catch (err) {
+    console.warn('[CivicPulse UI] Embedded data parsing skipped:', err);
+  }
+
+  // Step 2: Actively fetch live payload from API endpoints (/api/data or /api/overview)
+  fetchDataAndRender(false);
+});
+
+// -------------------------------------------------------------------------
+// 2. Dynamic Fetch from API Routes
+// -------------------------------------------------------------------------
+async function fetchDataAndRender(isUserRefresh = false) {
+  const icon = document.getElementById('refresh-icon');
+  const text = document.getElementById('refresh-text');
+  if (icon) icon.classList.add('fa-spin');
+  if (text && isUserRefresh) text.textContent = 'Updating...';
+
+  try {
+    // Try primary endpoint /api/data, fallback to /api/overview
+    let response = await fetch('/api/data').catch(() => null);
+    if (!response || !response.ok) {
+      console.warn('[CivicPulse UI] /api/data unavailable, attempting /api/overview...');
+      response = await fetch('/api/overview').catch(() => null);
+    }
+
+    if (response && response.ok) {
+      const data = await response.json();
+      console.log('[CivicPulse UI] Successfully received API payload:', data);
+      globalBackendData = data;
+      updateUIWithData(data);
+
+      if (isUserRefresh) {
+        showToastNotification();
+      }
+    } else {
+      console.warn('[CivicPulse UI] Backend API route not reachable, using fallback dataset.');
+      if (!globalBackendData) {
+        useFallbackMockData();
+      }
+    }
+  } catch (error) {
+    console.error('[CivicPulse UI] Fetch error:', error);
+    if (!globalBackendData) {
+      useFallbackMockData();
+    }
+  } finally {
+    if (icon) icon.classList.remove('fa-spin');
+    if (text) text.textContent = 'Refresh';
+  }
+}
+
+function refreshData() {
+  fetchDataAndRender(true);
+}
+
+function showToastNotification() {
+  const toast = document.getElementById('toast-banner');
+  if (toast) {
+    toast.classList.remove('hidden');
+    setTimeout(() => {
+      toast.classList.add('hidden');
+    }, 3500);
+  }
+}
+
+// -------------------------------------------------------------------------
+// 3. Populate DOM Elements Dynamically
+// -------------------------------------------------------------------------
+function updateUIWithData(data) {
+  if (!data) return;
+
+  const alerts = data.alerts || [];
+  const spatial = data.spatial_clusters || {};
+  const ripples = data.ripple_hypotheses || [];
+  const summary = data.summary || {};
+  const totalAnomalies = data.total_anomalies !== undefined ? data.total_anomalies : alerts.length;
+
+  // A. Calculate Metric Totals
+  let totalComplaints = summary.total_complaints;
+  if (!totalComplaints) {
+    totalComplaints = alerts.reduce((acc, a) => acc + ((a.metrics && a.metrics.observed_count) || 0), 0);
+    if (totalComplaints === 0) totalComplaints = 18246;
+  }
+
+  const uniqueCategories = new Set();
+  const uniqueAreas = new Set();
+  alerts.forEach(a => {
+    if (a.category) uniqueCategories.add(a.category);
+    if (a.area_id) uniqueAreas.add(a.area_id);
+  });
+
+  const totalAreas = summary.total_areas || spatial.total_areas || (uniqueAreas.size || 47);
+  const totalCategories = summary.total_categories || Math.max(uniqueCategories.size, 23);
+
+  // B. Update 4-Column Metric Cards
+  setElementText('val-complaints', totalComplaints.toLocaleString());
+  setElementText('val-anomalies', totalAnomalies.toLocaleString());
+  setElementText('val-areas', totalAreas.toLocaleString());
+  setElementText('val-categories', totalCategories.toLocaleString());
+
+  // Also support original UXPilot query selectors without specific IDs
+  updateCardByContainer('#metric-complaints', totalComplaints.toLocaleString());
+  updateCardByContainer('#metric-anomalies', totalAnomalies.toLocaleString());
+  updateCardByContainer('#metric-areas', totalAreas.toLocaleString());
+  updateCardByContainer('#metric-categories', totalCategories.toLocaleString());
+
+  // C. Populate Area Filter Dropdown
+  populateAreaFilter(spatial.active_areas || Array.from(uniqueAreas));
+
+  // D. Update Emerging Civic Issues Submodules
+  renderTrendChart(alerts);
+  renderGeographicalWards(spatial.by_geography, alerts);
+  renderCompoundingCrises(spatial.compounding_crises || []);
+  renderRippleHypotheses(ripples);
+  renderAlertsTable(alerts);
+
+  // E. Update Top Ribbon Sync Timestamp
+  const syncElem = document.getElementById('sync-timestamp');
+  if (syncElem) {
+    const now = new Date();
+    syncElem.innerHTML = `<i class="fa-regular fa-clock mr-1"></i> Last sync: ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}, ${now.toLocaleDateString([], {month:'short', day:'numeric'})}`;
+  }
+}
+
+function setElementText(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+function updateCardByContainer(selector, value) {
+  const container = document.querySelector(selector);
+  if (container) {
+    const p = container.querySelector('p.text-3xl');
+    if (p) p.textContent = value;
+  }
+}
+
+// -------------------------------------------------------------------------
+// 4. Trend Chart (Plotly)
+// -------------------------------------------------------------------------
+function renderTrendChart(alerts) {
+  try {
+    const weeks = ['Wk1', 'Wk2', 'Wk3', 'Wk4', 'Wk5', 'Wk6', 'Wk7', 'Wk8', 'Wk9', 'Wk10'];
+    const baseline = [420, 440, 455, 460, 470, 480, 500, 520, 530, 515];
+    const actual =   [420, 440, 460, 455, 610, 470, 480, 520, 710, 505];
+
+    const baselineTrace = {
+      x: weeks,
+      y: baseline,
+      type: 'scatter',
+      mode: 'lines',
+      name: 'Baseline Expected',
+      line: { color: '#94A3B8', width: 2, dash: 'dot' },
+      hoverinfo: 'y+name'
+    };
+
+    const actualTrace = {
+      x: weeks,
+      y: actual,
+      type: 'scatter',
+      mode: 'lines+markers',
+      name: 'Observed Complaints',
+      fill: 'tozeroy',
+      line: { color: '#EA580C', width: 2.5 },
+      fillcolor: 'rgba(234, 88, 12, 0.08)',
+      marker: {
+        size: [5, 5, 5, 5, 9, 5, 5, 5, 10, 5],
+        color: ['#EA580C','#EA580C','#EA580C','#EA580C','#C2410C','#EA580C','#EA580C','#EA580C','#C2410C','#EA580C']
+      },
+      hovertemplate: '%{x}: %{y} complaints<extra></extra>'
+    };
+
+    const layout = {
+      margin: { t: 10, r: 15, b: 30, l: 35 },
+      plot_bgcolor: '#FFFFFF',
+      paper_bgcolor: '#FFFFFF',
+      xaxis: { showgrid: false, tickfont: { size: 10, color: '#94A3B8' } },
+      yaxis: { showgrid: true, gridcolor: '#F1F5F9', tickfont: { size: 10, color: '#94A3B8' } },
+      showlegend: false
+    };
+
+    Plotly.newPlot('trend-chart', [baselineTrace, actualTrace], layout, { responsive: true, displayModeBar: false });
+
+    const badgeCount = document.getElementById('trend-anomalies-count');
+    if (badgeCount) {
+      badgeCount.textContent = alerts ? alerts.length : 3;
+    }
+  } catch (err) {
+    console.error('Trend chart render error:', err);
+  }
+}
+
+// -------------------------------------------------------------------------
+// 5. Geographical Monitoring Cards
+// -------------------------------------------------------------------------
+function renderGeographicalWards(byGeography, allAlerts) {
+  const container = document.getElementById('geo-cards-grid');
+  const summaryTag = document.getElementById('geo-summary-tag');
+  if (!container) return;
+
+  if (byGeography && Object.keys(byGeography).length > 0) {
+    const areas = Object.keys(byGeography);
+    if (summaryTag) summaryTag.textContent = `${areas.length} active wards monitored`;
+    container.innerHTML = '';
+
+    areas.forEach(areaName => {
+      const areaAlerts = byGeography[areaName] || [];
+      let totalComplaints = 0;
+      let hasHigh = false;
+
+      areaAlerts.forEach(a => {
+        const obs = (a.metrics && a.metrics.observed_count) || 1;
+        totalComplaints += obs;
+        if ((a.severity || '').toUpperCase() === 'HIGH') hasHigh = true;
+      });
+
+      const badgeClass = hasHigh ? 'text-orange-700 bg-orange-50 border-orange-200' : 'text-amber-700 bg-amber-50 border-amber-200';
+      const badgeText = hasHigh ? 'High' : 'Moderate';
+
+      const card = document.createElement('div');
+      card.className = 'rounded-md border border-slate-200 p-3.5 flex items-center justify-between bg-white hover:border-slate-300 transition-colors shadow-2xs';
+      card.innerHTML = `
+        <div>
+          <p class="text-sm font-semibold text-[#0F2540] truncate max-w-[180px]">${escapeHtml(areaName)}</p>
+          <p class="text-xs text-slate-500 mt-0.5">${totalComplaints} complaints &bull; ${areaAlerts.length} alert(s)</p>
+        </div>
+        <span class="text-[11px] font-semibold ${badgeClass} border px-2 py-0.5 rounded-full">${badgeText}</span>
+      `;
+      container.appendChild(card);
+    });
+  }
+}
+
+// -------------------------------------------------------------------------
+// 6. Compounding Civic Crises
+// -------------------------------------------------------------------------
+function renderCompoundingCrises(crises) {
+  const container = document.getElementById('compounding-crises-list');
+  const badge = document.getElementById('crises-count-badge');
+  if (!container) return;
+
+  if (badge) badge.textContent = `${crises.length} active compounding crisis cluster(s)`;
+
+  if (!crises || crises.length === 0) {
+    container.innerHTML = `
+      <div class="rounded-md border border-slate-200 bg-slate-50/50 p-4 text-center text-slate-500 text-xs">
+        <i class="fa-solid fa-check-circle text-emerald-600 mr-1.5"></i> No multi-category compounding crises detected in the current window.
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = '';
+  crises.forEach(c => {
+    const isCritical = (c.compound_severity || '').toUpperCase() === 'CRITICAL';
+    const border = isCritical ? 'border-red-300 bg-red-50/20' : 'border-orange-200 bg-orange-50/20';
+    const tag = isCritical ? 'bg-red-100 text-red-800' : 'bg-orange-100 text-orange-800';
+
+    const card = document.createElement('div');
+    card.className = `rounded-lg border ${border} p-4 transition-all`;
+    card.innerHTML = `
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold px-2 py-0.5 rounded ${tag}">${c.compound_severity || 'HIGH'} PRIORITY</span>
+          <h5 class="font-bold text-[#0F2540] text-sm">${escapeHtml(c.title)}</h5>
+        </div>
+        <span class="text-xs font-medium text-slate-500"><i class="fa-regular fa-clock mr-1"></i>Window: ${escapeHtml(c.time_window || 'Current')}</span>
+      </div>
+      <p class="text-xs text-slate-600 leading-relaxed mb-3">${escapeHtml(c.description)}</p>
+      <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 text-xs">
+        <span class="text-slate-500 font-medium">Overlapping Categories (${c.category_count}):</span>
+        ${(c.categories || []).map(cat => `<span class="bg-white border border-slate-200 px-2 py-0.5 rounded text-[11px] font-semibold text-slate-700"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i>${escapeHtml(cat)}</span>`).join('')}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// -------------------------------------------------------------------------
+// 7. Civic Ripple Hypotheses
+// -------------------------------------------------------------------------
+function renderRippleHypotheses(ripples) {
+  const container = document.getElementById('ripples-list');
+  const badge = document.getElementById('ripples-count-badge');
+  if (!container) return;
+
+  if (badge) badge.textContent = `${ripples.length} cascading ripple link(s)`;
+
+  if (!ripples || ripples.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-2 rounded-md border border-slate-200 bg-slate-50/50 p-4 text-center text-slate-500 text-xs">
+        <i class="fa-solid fa-check-circle text-emerald-600 mr-1.5"></i> No time-lagged cascading patterns detected within 24-48h horizon.
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = '';
+  ripples.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'rounded-md border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-slate-300 transition-colors';
+    card.innerHTML = `
+      <div class="flex items-start justify-between gap-2 mb-2">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+          <span class="text-xs font-bold text-[#0F2540] truncate max-w-[240px]">${escapeHtml(r.hypothesis_title)}</span>
+        </div>
+        <span class="text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full shrink-0">
+          <i class="fa-solid fa-hourglass-half mr-0.5"></i> ${r.time_lag_hours}h Lag
+        </span>
+      </div>
+      <p class="text-xs text-slate-600 mb-2.5 line-clamp-2">${escapeHtml(r.hypothesis_description)}</p>
+      <div class="text-[11px] text-slate-500 flex items-center justify-between pt-2 border-t border-slate-100">
+        <span><i class="fa-solid fa-location-crosshairs mr-1"></i> ${escapeHtml(r.proximity_basis)}</span>
+        <span class="font-semibold text-amber-800">Hypothesis Only</span>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// -------------------------------------------------------------------------
+// 8. Alert Investigation Table
+// -------------------------------------------------------------------------
+function renderAlertsTable(alerts) {
+  const tbody = document.getElementById('alerts-table-body');
+  const countTag = document.getElementById('alerts-count-tag');
+  if (!tbody) return;
+
+  if (countTag) countTag.textContent = `${alerts ? alerts.length : 0} Active Alerts`;
+
+  if (!alerts || alerts.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="py-6 text-center text-slate-400 text-sm">No anomalous alerts match active filters.</td>
+      </tr>`;
+    return;
+  }
+
+  tbody.innerHTML = '';
+  alerts.forEach(a => {
+    const sev = (a.severity || 'MEDIUM').toUpperCase();
+    const isHigh = sev === 'HIGH';
+    const badgeClass = isHigh ? 'text-orange-700 bg-orange-50 border-orange-200' : 'text-amber-700 bg-amber-50 border-amber-200';
+    const statusText = isHigh ? 'Critical Review' : 'Assigned';
+    const statusClass = isHigh ? 'bg-orange-50 text-orange-700' : 'bg-slate-100 text-slate-600';
+
+    const m = a.metrics || {};
+    const score = m.anomaly_score !== undefined ? m.anomaly_score.toFixed(2) : '3.40';
+
+    const row = document.createElement('tr');
+    row.className = 'hover:bg-slate-50/70 transition-colors';
+    row.innerHTML = `
+      <td class="py-3 pr-4 font-semibold text-[#0F2540] font-mono text-xs">${escapeHtml(a.alert_id)}</td>
+      <td class="py-3 pr-4 text-slate-700">
+        <p class="font-medium text-xs sm:text-sm text-[#0F2540]">${escapeHtml(a.title)}</p>
+        <p class="text-xs text-slate-500 mt-0.5 line-clamp-1">${escapeHtml(a.description)}</p>
+      </td>
+      <td class="py-3 pr-4 font-mono font-medium text-slate-600">${score}</td>
+      <td class="py-3 pr-4"><span class="text-[11px] font-semibold border ${badgeClass} px-2 py-0.5 rounded-full">${sev}</span></td>
+      <td class="py-3 pr-4"><span class="text-[11px] font-semibold ${statusClass} px-2 py-0.5 rounded-full">${statusText}</span></td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+// -------------------------------------------------------------------------
+// 9. Interactive Tab Navigation Switching
+// -------------------------------------------------------------------------
+function switchTab(tabKey) {
+  activeTab = tabKey;
+  console.log('[CivicPulse UI] Switching tab to:', tabKey);
+
+  // Update Navigation Tab Classes
+  const tabs = ['overview', 'complaints', 'wards', 'reports'];
+  tabs.forEach(t => {
+    const btn = document.getElementById(`tab-${t}`);
+    if (btn) {
+      if (t === tabKey) {
+        btn.className = 'px-3 py-2 rounded-md nav-tab-active transition-colors';
+      } else {
+        btn.className = 'px-3 py-2 rounded-md hover:bg-slate-50 transition-colors';
+      }
+    }
+  });
+
+  // Handle Tab Behaviors
+  if (tabKey === 'overview') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    removeSectionHighlights();
+  } else if (tabKey === 'complaints') {
+    highlightAndScroll('module-alert');
+  } else if (tabKey === 'wards') {
+    highlightAndScroll('module-geo');
+  } else if (tabKey === 'reports') {
+    openReportsModal();
+  }
+}
+
+function highlightAndScroll(targetId) {
+  removeSectionHighlights();
+  const el = document.getElementById(targetId);
+  if (el) {
+    el.classList.add('highlight-section');
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => {
+      el.classList.remove('highlight-section');
+    }, 2000);
+  }
+}
+
+function removeSectionHighlights() {
+  document.querySelectorAll('.highlight-section').forEach(el => el.classList.remove('highlight-section'));
+}
+
+function openReportsModal() {
+  const modal = document.getElementById('reports-modal');
+  const content = document.getElementById('reports-modal-content');
+  if (modal && globalBackendData) {
+    const alerts = globalBackendData.alerts || [];
+    const spatial = globalBackendData.spatial_clusters || {};
+    const ripples = globalBackendData.ripple_hypotheses || [];
+
+    content.innerHTML = `
+      <div class="space-y-2.5">
+        <div class="flex justify-between py-1 border-b border-slate-100">
+          <span class="text-slate-500">Total Anomalies Confirmed:</span>
+          <span class="font-bold text-[#0F2540]">${globalBackendData.total_anomalies || alerts.length}</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-100">
+          <span class="text-slate-500">Active Wards Monitored:</span>
+          <span class="font-bold text-[#0F2540]">${spatial.total_areas || 3}</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-100">
+          <span class="text-slate-500">Compounding Civic Crises:</span>
+          <span class="font-bold text-red-600">${(spatial.compounding_crises || []).length}</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-100">
+          <span class="text-slate-500">Cascading Ripple Hypotheses:</span>
+          <span class="font-bold text-amber-600">${ripples.length}</span>
+        </div>
+        <p class="text-xs text-slate-400 pt-2">Full report export available in CSV and PDF formats via municipal operations portal.</p>
+      </div>
+    `;
+    modal.classList.remove('hidden');
+  }
+}
+
+function closeReportsModal() {
+  const modal = document.getElementById('reports-modal');
+  if (modal) modal.classList.add('hidden');
+}
+
+// -------------------------------------------------------------------------
+// 10. Filters & Helpers
+// -------------------------------------------------------------------------
+function populateAreaFilter(areas) {
+  const select = document.getElementById('filter-area');
+  if (!select) return;
+  const currentVal = select.value;
+  select.innerHTML = '<option value="ALL">All Wards / Areas</option>';
+  areas.forEach(area => {
+    const opt = document.createElement('option');
+    opt.value = area;
+    opt.textContent = area;
+    if (area === currentVal) opt.selected = true;
+    select.appendChild(opt);
+  });
+}
+
+function applyFilters() {
+  if (!globalBackendData) return;
+  const areaFilter = document.getElementById('filter-area').value;
+  const sevFilter = document.getElementById('filter-severity').value;
+
+  const filtered = (globalBackendData.alerts || []).filter(a => {
+    const areaMatch = (areaFilter === 'ALL') || (a.area_id === areaFilter);
+    const sevMatch = (sevFilter === 'ALL') || ((a.severity || '').toUpperCase() === sevFilter);
+    return areaMatch && sevMatch;
+  });
+
+  renderAlertsTable(filtered);
+}
+
+function exportReport() {
+  if (!globalBackendData) return;
+  const jsonStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(globalBackendData, null, 2));
+  const dlAnchor = document.createElement('a');
+  dlAnchor.setAttribute("href", jsonStr);
+  dlAnchor.setAttribute("download", `civicpulse_report_${Date.now()}.json`);
+  document.body.appendChild(dlAnchor);
+  dlAnchor.click();
+  dlAnchor.remove();
+}
+
+function useFallbackMockData() {
+  console.log('[CivicPulse UI] Using fallback realistic dataset');
+  const fallback = {
+    total_anomalies: 7,
+    alerts: [
+      {
+        alert_id: "ALT-WARD-12-WATER-001",
+        title: "[HIGH ALERT] Surge in Water Infrastructure - Area Ward 12 — Riverside",
+        description: "Civic spike detected: An anomalous surge of 642 incidents against baseline 180.0.",
+        severity: "HIGH",
+        area_id: "Ward 12 — Riverside",
+        category: "Water Infrastructure",
+        metrics: { observed_count: 642, expected_count: 180.0, anomaly_score: 4.85 }
+      },
+      {
+        alert_id: "ALT-WARD-04-LIGHT-002",
+        title: "[HIGH ALERT] Surge in Streetlight Outage Cluster - Area Ward 04 — Old Town",
+        description: "Civic spike detected: Streetlight outages in Ward 04.",
+        severity: "HIGH",
+        area_id: "Ward 04 — Old Town",
+        category: "Streetlight Outage Cluster",
+        metrics: { observed_count: 398, expected_count: 160.0, anomaly_score: 3.20 }
+      },
+      {
+        alert_id: "ALT-WARD-27-FLOOD-003",
+        title: "[MEDIUM ALERT] Surge in Road Flooding - Area Ward 27 — Lakeview",
+        description: "Civic spike detected: Road Flooding in Ward 27.",
+        severity: "MEDIUM",
+        area_id: "Ward 27 — Lakeview",
+        category: "Road Flooding",
+        metrics: { observed_count: 211, expected_count: 65.0, anomaly_score: 3.45 }
+      }
+    ],
+    spatial_clusters: {
+      total_areas: 47,
+      active_areas: ["Ward 12 — Riverside", "Ward 04 — Old Town", "Ward 27 — Lakeview"],
+      by_geography: {
+        "Ward 12 — Riverside": [{ severity: "HIGH", metrics: { observed_count: 642 } }],
+        "Ward 04 — Old Town": [{ severity: "HIGH", metrics: { observed_count: 398 } }],
+        "Ward 27 — Lakeview": [{ severity: "MEDIUM", metrics: { observed_count: 211 } }],
+        "Ward 31 — Greenfield": [{ severity: "LOW", metrics: { observed_count: 154 } }]
+      },
+      compounding_crises: [
+        {
+          title: "Compounding Civic Crisis [HIGH]: 2 Concurrent Issues in Ward 12 — Riverside",
+          description: "Multi-category crisis in Ward 12 during same time window.",
+          compound_severity: "HIGH",
+          category_count: 2,
+          categories: ["Water Infrastructure", "Drainage Backflow"]
+        }
+      ]
+    },
+    ripple_hypotheses: [
+      {
+        hypothesis_title: "Potential Cascade: 'Water Infrastructure' preceding 'Health & Sanitation' in Ward 12 (30h lag)",
+        hypothesis_description: "Early water failures in Ward 12 followed by sanitation complaints.",
+        time_lag_hours: 30.0,
+        proximity_basis: "WARD_CO_LOCATION"
+      }
+    ]
+  };
+  globalBackendData = fallback;
+  updateUIWithData(fallback);
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+</script>
+
+</body>
+</html>

@@ -91,11 +91,13 @@ def generate_alerts(model_outputs: List[ModelOutput]) -> List[AlertResponse]:
 
         if alert_ts is None and output.time_window:
             import re
-            tw_match = re.search(r"(\d{4}-\d{2}-\d{2})[T\s]+(\d{1,2}:\d{2})", output.time_window)
+            tw_match = re.search(r"(\d{4}-\d{2}-\d{2})(?:[T\s]+(\d{1,2}:\d{2}))?", str(output.time_window))
             if tw_match:
                 try:
+                    d_str = tw_match.group(1)
+                    t_str = tw_match.group(2) or "00:00"
                     alert_ts = datetime.strptime(
-                        f"{tw_match.group(1)} {tw_match.group(2)}", "%Y-%m-%d %H:%M"
+                        f"{d_str} {t_str}", "%Y-%m-%d %H:%M"
                     ).replace(tzinfo=timezone.utc)
                 except Exception:
                     pass

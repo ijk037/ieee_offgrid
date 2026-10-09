@@ -169,8 +169,14 @@ def extract_coordinates(alert: AlertResponse) -> Tuple[Optional[float], Optional
         except (ValueError, TypeError):
             pass
 
-    # Check metrics dict
-    metrics = getattr(alert, "metrics", {}) or {}
+    # Check metrics dict safely
+    raw_metrics = getattr(alert, "metrics", {}) or {}
+    if hasattr(raw_metrics, "model_dump"):
+        metrics = raw_metrics.model_dump()
+    elif isinstance(raw_metrics, dict):
+        metrics = raw_metrics
+    else:
+        metrics = {}
     if lat is None:
         for k in ("latitude", "lat"):
             if k in metrics and metrics[k] is not None:

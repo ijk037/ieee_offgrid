@@ -158,3 +158,40 @@ def test_csv_file_loading():
         import os
         if os.path.exists(filepath):
             os.remove(filepath)
+
+
+def test_load_real_model_records_production():
+    """Verify load_real_model_records ingests repository dataset and trained model."""
+    from app_adapter import load_real_model_records
+    records = load_real_model_records()
+    assert len(records) > 0
+    anomalies = [r for r in records if r.is_anomaly]
+    assert len(anomalies) > 0
+    # Coordinates / metadata should be enriched
+    has_meta = any("latitude" in r.statistical_evidence for r in anomalies)
+    assert has_meta is True
+
+
+def test_graceful_fixture_fallback_when_no_csv():
+    """Verify that if no CSV dataset is present, it gracefully falls back to the fixture pipeline."""
+    import tempfile
+    from app_adapter import load_real_model_records
+
+    with tempfile.TemporaryDirectory() as empty_dir:
+        records = load_real_model_records(base_dir=empty_dir)
+        assert len(records) > 0
+        anomalies = [r for r in records if r.is_anomaly]
+        assert len(anomalies) > 0, "Graceful fallback must produce valid anomalies"
+
+
+def test_backend_process_default_real_inference():
+    """Verify CivicPulseBackend.process() with no args runs real inference and produces complete response."""
+    backend = CivicPulseBackend()
+    response = backend.process()
+    assert response["total_anomalies"] > 0
+    assert len(response["alerts"]) > 0
+    assert response["spatial_clusters"]["total_areas"] > 0
+    assert "summary" in response
+    assert "trend_series" in response
+    assert response["summary"]["status"] == "System Operational — Live Model Inference"
+

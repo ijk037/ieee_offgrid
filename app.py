@@ -26,7 +26,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict
 
-from flask import Flask, jsonify, render_template, request, send_from_directory
+from flask import Flask, jsonify, render_template, request
 from app_adapter import CivicPulseBackend
 
 logger = logging.getLogger("civicpulse.app")
@@ -99,16 +99,14 @@ def load_backend_payload(force_refresh: bool = False) -> Dict[str, Any]:
         if cleaned_csv.exists():
             try:
                 import pandas as pd
-                df = pd.read_csv(cleaned_csv)
-                total_complaints = len(df)
+                total_complaints = len(pd.read_csv(cleaned_csv))
             except Exception:
                 pass
 
         if total_complaints == 0 and features_csv.exists():
             try:
                 import pandas as pd
-                df = pd.read_csv(features_csv)
-                total_complaints = int(df["observed_count"].sum())
+                total_complaints = int(pd.read_csv(features_csv)["observed_count"].sum())
             except Exception:
                 pass
 
@@ -155,7 +153,6 @@ def index():
     initial_json = json.dumps(payload, default=str)
 
     return render_template("dashboard.html", BACKEND_DATA_JSON=initial_json)
-
 
 
 @app.route("/api/data", methods=["GET"])

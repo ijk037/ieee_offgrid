@@ -4,6 +4,7 @@ Transforms detected anomalies from machine learning / statistical models
 into actionable operational alerts for municipal authorities and operators.
 """
 
+import re
 import uuid
 from datetime import datetime, timezone
 from typing import List
@@ -90,7 +91,6 @@ def generate_alerts(model_outputs: List[ModelOutput]) -> List[AlertResponse]:
                 pass
 
         if alert_ts is None and output.time_window:
-            import re
             tw_match = re.search(r"(\d{4}-\d{2}-\d{2})(?:[T\s]+(\d{1,2}:\d{2}))?", str(output.time_window))
             if tw_match:
                 try:

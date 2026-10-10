@@ -12,7 +12,7 @@ Responsibilities:
 import os
 import logging
 import argparse
-from typing import List, Tuple, Optional
+from typing import List, Tuple
 import pandas as pd
 import numpy as np
 
@@ -41,7 +41,7 @@ def aggregate_daily_complaints(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
     if "date" not in df.columns:
         df["date"] = pd.to_datetime(df["created_at"]).dt.date
-    
+
     agg = (
         df.groupby(["area_id", "category", "date"])
         .size()

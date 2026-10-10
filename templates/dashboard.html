@@ -194,15 +194,28 @@
 
       <!-- 1. Complaint Trend Analysis -->
       <div id="module-trend" class="bg-white rounded-lg border border-slate-200 p-6 shadow-xs">
-        <div class="flex flex-col lg:flex-row lg:items-center gap-6">
-          <div class="flex items-start gap-4 lg:w-1/3">
+        <div class="flex items-start justify-between mb-4 gap-3">
+          <div class="flex items-start gap-4">
             <div class="w-11 h-11 rounded-md bg-slate-100 flex items-center justify-center shrink-0">
               <i class="fa-solid fa-chart-line text-[#0F2540]"></i>
             </div>
             <div>
               <h4 class="font-semibold text-[#0F2540]">Complaint Trend Analysis</h4>
-              <p class="text-sm text-slate-500 mt-1">Historical counts with detected anomaly spikes over time</p>
-              <div class="flex items-center gap-3 mt-3">
+              <p class="text-sm text-slate-500 mt-1">Historical complaint volumes with detected anomaly spikes over time</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 shrink-0">
+            <button onclick="toggleAccordion('trend')" id="btn-accordion-trend" class="flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-[#0F2540] bg-slate-50 hover:bg-slate-100 border border-slate-200 px-2.5 py-1.5 rounded-md transition-colors" title="Toggle Complaint Trend Analysis">
+              <span id="text-accordion-trend">Collapse</span>
+              <i id="icon-accordion-trend" class="fa-solid fa-chevron-up text-[10px] transition-transform"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="body-accordion-trend">
+          <div class="flex flex-col lg:flex-row lg:items-center gap-6 pt-2">
+            <div class="lg:w-1/3">
+              <div class="flex items-center gap-3 mb-2">
                 <span id="badge-trend-count" class="text-xs font-semibold text-orange-700 bg-orange-50 border border-orange-200 px-2.5 py-1 rounded-full">
                   <i class="fa-solid fa-triangle-exclamation text-[9px] mr-1"></i> <span id="trend-anomalies-count">3</span> anomalies detected
                 </span>
@@ -210,66 +223,58 @@
                   Baseline normal
                 </span>
               </div>
+              <p class="text-xs text-slate-500 leading-relaxed">
+                Aggregated daily and weekly incident timeseries benchmarked against rolling baseline expectations to pinpoint high-velocity civic surges.
+              </p>
             </div>
-          </div>
-          <div class="lg:w-2/3 border-t lg:border-t-0 lg:border-l border-slate-100 pt-5 lg:pt-0 lg:pl-6">
-            <div id="trend-chart" style="height:160px;"></div>
+            <div class="lg:w-2/3 border-t lg:border-t-0 lg:border-l border-slate-100 pt-5 lg:pt-0 lg:pl-6">
+              <div id="trend-chart" style="height:160px;"></div>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- 2. Geographical Monitoring -->
       <div id="module-geo" class="bg-white rounded-lg border border-slate-200 p-6 shadow-xs">
-        <div class="flex items-start justify-between mb-5">
+        <div class="flex items-start justify-between mb-5 gap-3">
           <div class="flex items-start gap-4">
             <div class="w-11 h-11 rounded-md bg-slate-100 flex items-center justify-center shrink-0">
               <i class="fa-solid fa-map-location-dot text-[#0F2540]"></i>
             </div>
             <div>
               <h4 class="font-semibold text-[#0F2540]">Geographical Monitoring</h4>
-              <p class="text-sm text-slate-500 mt-1">Ward / grid-level complaint density and anomaly distribution</p>
+              <p class="text-sm text-slate-500 mt-1">Ward / grid-level complaint density and localized anomaly distribution</p>
             </div>
           </div>
-          <span id="geo-summary-tag" class="text-xs text-slate-500 font-medium">Loading ward distribution...</span>
+          <div class="flex items-center gap-3 shrink-0">
+            <span id="geo-summary-tag" class="hidden sm:inline text-xs text-slate-500 font-medium">Loading ward distribution...</span>
+            <button onclick="toggleAccordion('geo')" id="btn-accordion-geo" class="flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-[#0F2540] bg-slate-50 hover:bg-slate-100 border border-slate-200 px-2.5 py-1.5 rounded-md transition-colors" title="Toggle Geographical Monitoring">
+              <span id="text-accordion-geo">Collapse</span>
+              <i id="icon-accordion-geo" class="fa-solid fa-chevron-up text-[10px] transition-transform"></i>
+            </button>
+          </div>
         </div>
 
-        <!-- Dynamic Ward Cards Grid -->
-        <div id="geo-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          <!-- Fallback initial HTML matching UXPilot export -->
-          <div class="rounded-md border border-slate-200 p-3.5 flex items-center justify-between">
-            <div>
-              <p class="text-sm font-semibold text-[#0F2540]">Ward 12 — Riverside</p>
-              <p class="text-xs text-slate-500 mt-0.5">642 complaints</p>
-            </div>
-            <span class="text-[11px] font-semibold text-orange-700 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full">High</span>
+        <div id="body-accordion-geo">
+          <!-- Dynamic Ward Cards Grid -->
+          <div id="geo-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <!-- Populated dynamically -->
           </div>
-          <div class="rounded-md border border-slate-200 p-3.5 flex items-center justify-between">
-            <div>
-              <p class="text-sm font-semibold text-[#0F2540]">Ward 04 — Old Town</p>
-              <p class="text-xs text-slate-500 mt-0.5">398 complaints</p>
-            </div>
-            <span class="text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">Moderate</span>
-          </div>
-          <div class="rounded-md border border-slate-200 p-3.5 flex items-center justify-between">
-            <div>
-              <p class="text-sm font-semibold text-[#0F2540]">Ward 27 — Lakeview</p>
-              <p class="text-xs text-slate-500 mt-0.5">211 complaints</p>
-            </div>
-            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">Normal</span>
-          </div>
-          <div class="rounded-md border border-slate-200 p-3.5 flex items-center justify-between">
-            <div>
-              <p class="text-sm font-semibold text-[#0F2540]">Ward 31 — Greenfield</p>
-              <p class="text-xs text-slate-500 mt-0.5">154 complaints</p>
-            </div>
-            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">Normal</span>
+
+          <!-- See More / Show Less Toggle Bar -->
+          <div id="geo-see-more-container" class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span id="geo-display-count" class="text-slate-500 font-medium">Showing top 8 wards</span>
+            <button onclick="toggleExpandGeo()" id="btn-expand-geo" class="font-semibold text-[#0F2540] hover:text-[#EA580C] flex items-center gap-1.5 transition-colors">
+              <span id="text-expand-geo">See All Wards</span>
+              <i id="icon-expand-geo" class="fa-solid fa-chevron-down text-[10px]"></i>
+            </button>
           </div>
         </div>
       </div>
 
       <!-- 3. Compounding Civic Crises (Multi-Category Detection) -->
       <div id="module-crises" class="bg-white rounded-lg border border-slate-200 p-6 shadow-xs">
-        <div class="flex items-start justify-between mb-4">
+        <div class="flex items-start justify-between mb-4 gap-3">
           <div class="flex items-start gap-4">
             <div class="w-11 h-11 rounded-md bg-red-50 flex items-center justify-center shrink-0">
               <i class="fa-solid fa-layer-group text-red-600"></i>
@@ -282,17 +287,34 @@
               <p class="text-sm text-slate-500 mt-1">Cross-category co-occurrences in the same geographic area during the same time window</p>
             </div>
           </div>
-          <span id="crises-count-badge" class="text-xs text-slate-500 font-medium">Scanning clusters...</span>
+          <div class="flex items-center gap-3 shrink-0">
+            <span id="crises-count-badge" class="hidden sm:inline text-xs text-slate-500 font-medium">Scanning clusters...</span>
+            <button onclick="toggleAccordion('crises')" id="btn-accordion-crises" class="flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-[#0F2540] bg-slate-50 hover:bg-slate-100 border border-slate-200 px-2.5 py-1.5 rounded-md transition-colors" title="Toggle Compounding Crises">
+              <span id="text-accordion-crises">Collapse</span>
+              <i id="icon-accordion-crises" class="fa-solid fa-chevron-up text-[10px] transition-transform"></i>
+            </button>
+          </div>
         </div>
 
-        <div id="compounding-crises-list" class="space-y-3">
-          <!-- Populated dynamically -->
+        <div id="body-accordion-crises">
+          <div id="compounding-crises-list" class="space-y-4">
+            <!-- Populated dynamically -->
+          </div>
+
+          <!-- See More / Show Less Toggle Bar -->
+          <div id="crises-see-more-container" class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span id="crises-display-count" class="text-slate-500 font-medium">Showing top 2 compounding crises</span>
+            <button onclick="toggleExpandCrises()" id="btn-expand-crises" class="font-semibold text-[#0F2540] hover:text-[#EA580C] flex items-center gap-1.5 transition-colors">
+              <span id="text-expand-crises">See All Crises</span>
+              <i id="icon-expand-crises" class="fa-solid fa-chevron-down text-[10px]"></i>
+            </button>
+          </div>
         </div>
       </div>
 
       <!-- 4. Civic Ripple Cascades (Predictive Hypotheses) -->
       <div id="module-ripples" class="bg-white rounded-lg border border-slate-200 p-6 shadow-xs">
-        <div class="flex items-start justify-between mb-4">
+        <div class="flex items-start justify-between mb-4 gap-3">
           <div class="flex items-start gap-4">
             <div class="w-11 h-11 rounded-md bg-amber-50 flex items-center justify-center shrink-0">
               <i class="fa-solid fa-water-ladder text-amber-600"></i>
@@ -305,71 +327,84 @@
               <p class="text-sm text-slate-500 mt-1">Time-lagged proximity analysis identifying cascading municipal infrastructure disruptions</p>
             </div>
           </div>
-          <span id="ripples-count-badge" class="text-xs text-slate-500 font-medium">Analyzing time lags...</span>
+          <div class="flex items-center gap-3 shrink-0">
+            <span id="ripples-count-badge" class="hidden sm:inline text-xs text-slate-500 font-medium">Analyzing time lags...</span>
+            <button onclick="toggleAccordion('ripples')" id="btn-accordion-ripples" class="flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-[#0F2540] bg-slate-50 hover:bg-slate-100 border border-slate-200 px-2.5 py-1.5 rounded-md transition-colors" title="Toggle Civic Ripple Engine">
+              <span id="text-accordion-ripples">Collapse</span>
+              <i id="icon-accordion-ripples" class="fa-solid fa-chevron-up text-[10px] transition-transform"></i>
+            </button>
+          </div>
         </div>
 
-        <!-- Investigation Disclaimer -->
-        <div class="bg-amber-50/70 border border-amber-200/80 rounded-md p-3 mb-4 flex items-start gap-2.5 text-xs text-amber-900">
-          <i class="fa-solid fa-shield-halved text-amber-600 mt-0.5"></i>
-          <span><strong>Investigation Notice:</strong> Cascading links below are evaluated as <em>hypotheses for investigation</em> based on spatio-temporal proximity and infrastructure dependencies. They do not represent definitive causal conclusions.</span>
-        </div>
+        <div id="body-accordion-ripples">
+          <!-- Investigation Disclaimer -->
+          <div class="bg-amber-50/80 border border-amber-200 rounded-md p-3.5 mb-4 flex items-start gap-2.5 text-xs text-amber-950">
+            <i class="fa-solid fa-shield-halved text-amber-600 mt-0.5 shrink-0"></i>
+            <span class="break-words whitespace-normal leading-relaxed"><strong>Municipal Notice:</strong> Cascading links below are evaluated as <em>hypotheses for investigation</em> based on spatio-temporal proximity and municipal infrastructure dependencies. They do not represent definitive causal conclusions.</span>
+          </div>
 
-        <div id="ripples-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <!-- Populated dynamically -->
+          <div id="ripples-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Populated dynamically -->
+          </div>
+
+          <!-- See More / Show Less Toggle Bar -->
+          <div id="ripples-see-more-container" class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span id="ripples-display-count" class="text-slate-500 font-medium">Showing top 4 cascading hypotheses</span>
+            <button onclick="toggleExpandRipples()" id="btn-expand-ripples" class="font-semibold text-[#0F2540] hover:text-[#EA580C] flex items-center gap-1.5 transition-colors">
+              <span id="text-expand-ripples">See All Hypotheses</span>
+              <i id="icon-expand-ripples" class="fa-solid fa-chevron-down text-[10px]"></i>
+            </button>
+          </div>
         </div>
       </div>
 
       <!-- 5. Alert Investigation Table -->
       <div id="module-alert" class="bg-white rounded-lg border border-slate-200 p-6 shadow-xs">
-        <div class="flex items-start justify-between mb-5">
+        <div class="flex items-start justify-between mb-5 gap-3">
           <div class="flex items-start gap-4">
             <div class="w-11 h-11 rounded-md bg-orange-50 flex items-center justify-center shrink-0">
               <i class="fa-solid fa-file-shield text-[#EA580C]"></i>
             </div>
             <div>
               <h4 class="font-semibold text-[#0F2540]">Alert Investigation</h4>
-              <p class="text-sm text-slate-500 mt-1">Evidence summary, anomaly score, and investigation priority</p>
+              <p class="text-sm text-slate-500 mt-1">Operational anomaly detection, volume surge evidence, and field triage priority</p>
             </div>
           </div>
-          <span id="alerts-count-tag" class="text-xs text-slate-500 font-medium">Active Alerts</span>
+          <div class="flex items-center gap-3 shrink-0">
+            <span id="alerts-count-tag" class="hidden sm:inline text-xs text-slate-500 font-medium">Active Alerts</span>
+            <button onclick="toggleAccordion('alert')" id="btn-accordion-alert" class="flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-[#0F2540] bg-slate-50 hover:bg-slate-100 border border-slate-200 px-2.5 py-1.5 rounded-md transition-colors" title="Toggle Alert Investigation">
+              <span id="text-accordion-alert">Collapse</span>
+              <i id="icon-accordion-alert" class="fa-solid fa-chevron-up text-[10px] transition-transform"></i>
+            </button>
+          </div>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead>
-              <tr class="text-left text-xs text-slate-400 uppercase tracking-wide border-b border-slate-200">
-                <th class="py-2 pr-4 font-semibold">Alert ID</th>
-                <th class="py-2 pr-4 font-semibold">Evidence Summary</th>
-                <th class="py-2 pr-4 font-semibold">Anomaly Score</th>
-                <th class="py-2 pr-4 font-semibold">Priority</th>
-                <th class="py-2 pr-4 font-semibold">Status</th>
-              </tr>
-            </thead>
-            <tbody id="alerts-table-body" class="divide-y divide-slate-100">
-              <!-- Initial fallback rows matching UXPilot export -->
-              <tr>
-                <td class="py-3 pr-4 font-semibold text-[#0F2540]">ALT-2291</td>
-                <td class="py-3 pr-4 text-slate-600">Surge in water-logging reports, Ward 12</td>
-                <td class="py-3 pr-4 text-slate-600">0.91</td>
-                <td class="py-3 pr-4"><span class="text-[11px] font-semibold text-orange-700 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full">Critical</span></td>
-                <td class="py-3 pr-4"><span class="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">Under Review</span></td>
-              </tr>
-              <tr>
-                <td class="py-3 pr-4 font-semibold text-[#0F2540]">ALT-2288</td>
-                <td class="py-3 pr-4 text-slate-600">Repeated streetlight outage cluster, Ward 04</td>
-                <td class="py-3 pr-4 text-slate-600">0.74</td>
-                <td class="py-3 pr-4"><span class="text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">High</span></td>
-                <td class="py-3 pr-4"><span class="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">Assigned</span></td>
-              </tr>
-              <tr>
-                <td class="py-3 pr-4 font-semibold text-[#0F2540]">ALT-2271</td>
-                <td class="py-3 pr-4 text-slate-600">Sanitation complaint volume within expected range</td>
-                <td class="py-3 pr-4 text-slate-600">0.32</td>
-                <td class="py-3 pr-4"><span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">Low</span></td>
-                <td class="py-3 pr-4"><span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Resolved</span></td>
-              </tr>
-            </tbody>
-          </table>
+        <div id="body-accordion-alert">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="text-left text-xs text-slate-400 uppercase tracking-wide border-b border-slate-200">
+                  <th class="py-2.5 pr-4 font-semibold">Incident Ref &amp; Ward</th>
+                  <th class="py-2.5 pr-4 font-semibold">Civic Problem &amp; Summary</th>
+                  <th class="py-2.5 pr-4 font-semibold">Spike Magnitude</th>
+                  <th class="py-2.5 pr-4 font-semibold">Action Priority</th>
+                  <th class="py-2.5 pr-4 font-semibold">Municipal Status</th>
+                </tr>
+              </thead>
+              <tbody id="alerts-table-body" class="divide-y divide-slate-100">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- See More / Show Less Toggle Bar -->
+          <div id="alerts-see-more-container" class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span id="alerts-display-count" class="text-slate-500 font-medium">Showing top 10 critical alerts</span>
+            <button onclick="toggleExpandAlerts()" id="btn-expand-alerts" class="font-semibold text-[#0F2540] hover:text-[#EA580C] flex items-center gap-1.5 transition-colors">
+              <span id="text-expand-alerts">See All Alerts</span>
+              <i id="icon-expand-alerts" class="fa-solid fa-chevron-down text-[10px]"></i>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -414,6 +449,73 @@
 <script>
 let globalBackendData = null;
 let activeTab = 'overview';
+
+// UI Accordion and View Expansion States
+let accordionState = {
+  trend: true,
+  geo: true,
+  crises: true,
+  ripples: true,
+  alert: true
+};
+
+let expansionState = {
+  geo: false,     // false: 8 wards, true: all wards
+  crises: false,  // false: 2 crises, true: all crises
+  ripples: false, // false: 4 ripples, true: all hypotheses
+  alerts: false   // false: 10 alerts, true: all alerts
+};
+
+function toggleAccordion(key) {
+  accordionState[key] = !accordionState[key];
+  const isOpen = accordionState[key];
+  const body = document.getElementById(`body-accordion-${key}`);
+  const icon = document.getElementById(`icon-accordion-${key}`);
+  const text = document.getElementById(`text-accordion-${key}`);
+  if (body) {
+    if (isOpen) {
+      body.classList.remove('hidden');
+    } else {
+      body.classList.add('hidden');
+    }
+  }
+  if (text) {
+    text.textContent = isOpen ? 'Collapse' : 'Expand';
+  }
+  if (icon) {
+    if (isOpen) {
+      icon.className = 'fa-solid fa-chevron-up text-[10px] transition-transform';
+    } else {
+      icon.className = 'fa-solid fa-chevron-down text-[10px] transition-transform';
+    }
+  }
+}
+
+function toggleExpandGeo() {
+  expansionState.geo = !expansionState.geo;
+  if (globalBackendData) {
+    renderGeographicalWards(globalBackendData.spatial_clusters ? globalBackendData.spatial_clusters.by_geography : {}, globalBackendData.alerts);
+  }
+}
+
+function toggleExpandCrises() {
+  expansionState.crises = !expansionState.crises;
+  if (globalBackendData) {
+    renderCompoundingCrises(globalBackendData.spatial_clusters ? (globalBackendData.spatial_clusters.compounding_crises || []) : []);
+  }
+}
+
+function toggleExpandRipples() {
+  expansionState.ripples = !expansionState.ripples;
+  if (globalBackendData) {
+    renderRippleHypotheses(globalBackendData.ripple_hypotheses || []);
+  }
+}
+
+function toggleExpandAlerts() {
+  expansionState.alerts = !expansionState.alerts;
+  applyFilters();
+}
 
 // -------------------------------------------------------------------------
 // 1. Lifecycle Hook: Page Load Data Fetching
@@ -638,6 +740,9 @@ function renderTrendChart(alerts) {
 function renderGeographicalWards(byGeography, allAlerts) {
   const container = document.getElementById('geo-cards-grid');
   const summaryTag = document.getElementById('geo-summary-tag');
+  const countTag = document.getElementById('geo-display-count');
+  const btnText = document.getElementById('text-expand-geo');
+  const btnIcon = document.getElementById('icon-expand-geo');
   if (!container) return;
 
   if (byGeography && Object.keys(byGeography).length > 0) {
@@ -652,34 +757,49 @@ function renderGeographicalWards(byGeography, allAlerts) {
       return bObs - aObs;
     });
 
-    if (summaryTag) {
-      summaryTag.textContent = `${areas.length} active wards monitored (Top ${Math.min(16, areas.length)} displayed)`;
-    }
-    container.innerHTML = '';
+    const isExpanded = expansionState.geo;
+    const defaultLimit = 8;
+    const displayLimit = isExpanded ? sortedAreas.length : defaultLimit;
+    const displayAreas = sortedAreas.slice(0, displayLimit);
 
-    const displayAreas = sortedAreas.slice(0, 16);
+    if (summaryTag) {
+      summaryTag.textContent = `${areas.length} active wards monitored`;
+    }
+    if (countTag) {
+      countTag.textContent = `Showing ${displayAreas.length} of ${sortedAreas.length} wards`;
+    }
+    if (btnText && btnIcon) {
+      btnText.textContent = isExpanded ? 'Show Fewer Wards' : `See All Wards (${sortedAreas.length})`;
+      btnIcon.className = isExpanded ? 'fa-solid fa-chevron-up text-[10px]' : 'fa-solid fa-chevron-down text-[10px]';
+    }
+
+    container.innerHTML = '';
     displayAreas.forEach(areaName => {
       const areaAlerts = byGeography[areaName] || [];
       let totalComplaints = 0;
       let hasHigh = false;
+      let friendlyName = areaName;
 
       areaAlerts.forEach(a => {
         const obs = (a.metrics && a.metrics.observed_count) || 1;
         totalComplaints += obs;
         if ((a.severity || '').toUpperCase() === 'HIGH') hasHigh = true;
+        if (a.metrics && a.metrics.statistical_evidence && a.metrics.statistical_evidence.ward_title) {
+          friendlyName = `${a.metrics.statistical_evidence.ward_title} (${areaName})`;
+        }
       });
 
       const badgeClass = hasHigh ? 'text-orange-700 bg-orange-50 border-orange-200' : 'text-amber-700 bg-amber-50 border-amber-200';
       const badgeText = hasHigh ? 'High' : 'Moderate';
 
       const card = document.createElement('div');
-      card.className = 'rounded-md border border-slate-200 p-3.5 flex items-center justify-between bg-white hover:border-slate-300 transition-colors shadow-2xs';
+      card.className = 'rounded-md border border-slate-200 p-3.5 flex items-center justify-between bg-white hover:border-slate-300 transition-colors shadow-2xs min-w-0';
       card.innerHTML = `
-        <div>
-          <p class="text-sm font-semibold text-[#0F2540] truncate max-w-[180px]">${escapeHtml(areaName)}</p>
+        <div class="min-w-0 pr-2">
+          <p class="text-sm font-semibold text-[#0F2540] truncate" title="${escapeHtml(friendlyName)}">${escapeHtml(friendlyName)}</p>
           <p class="text-xs text-slate-500 mt-0.5">${totalComplaints} complaints &bull; ${areaAlerts.length} alert(s)</p>
         </div>
-        <span class="text-[11px] font-semibold ${badgeClass} border px-2 py-0.5 rounded-full">${badgeText}</span>
+        <span class="text-[11px] font-semibold ${badgeClass} border px-2 py-0.5 rounded-full shrink-0">${badgeText}</span>
       `;
       container.appendChild(card);
     });
@@ -692,38 +812,106 @@ function renderGeographicalWards(byGeography, allAlerts) {
 function renderCompoundingCrises(crises) {
   const container = document.getElementById('compounding-crises-list');
   const badge = document.getElementById('crises-count-badge');
+  const countTag = document.getElementById('crises-display-count');
+  const btnText = document.getElementById('text-expand-crises');
+  const btnIcon = document.getElementById('icon-expand-crises');
   if (!container) return;
 
-  if (badge) badge.textContent = `${crises.length} active compounding crisis cluster(s)`;
+  const totalCrises = crises ? crises.length : 0;
+  if (badge) badge.textContent = `${totalCrises} compounding crisis cluster(s)`;
 
   if (!crises || crises.length === 0) {
     container.innerHTML = `
       <div class="rounded-md border border-slate-200 bg-slate-50/50 p-4 text-center text-slate-500 text-xs">
         <i class="fa-solid fa-check-circle text-emerald-600 mr-1.5"></i> No multi-category compounding crises detected in the current window.
       </div>`;
+    const seeMoreBar = document.getElementById('crises-see-more-container');
+    if (seeMoreBar) seeMoreBar.classList.add('hidden');
     return;
   }
 
+  const seeMoreBar = document.getElementById('crises-see-more-container');
+  if (seeMoreBar) seeMoreBar.classList.remove('hidden');
+
+  const isExpanded = expansionState.crises;
+  const defaultLimit = 2;
+  const displayLimit = isExpanded ? totalCrises : defaultLimit;
+  const displayCrises = crises.slice(0, displayLimit);
+
+  if (countTag) {
+    countTag.textContent = `Showing ${displayCrises.length} of ${totalCrises} compounding crises`;
+  }
+  if (btnText && btnIcon) {
+    btnText.textContent = isExpanded ? 'Show Fewer Crises' : `See All Crises (${totalCrises})`;
+    btnIcon.className = isExpanded ? 'fa-solid fa-chevron-up text-[10px]' : 'fa-solid fa-chevron-down text-[10px]';
+  }
+
   container.innerHTML = '';
-  crises.forEach(c => {
+  displayCrises.forEach(c => {
     const isCritical = (c.compound_severity || '').toUpperCase() === 'CRITICAL';
-    const border = isCritical ? 'border-red-300 bg-red-50/20' : 'border-orange-200 bg-orange-50/20';
-    const tag = isCritical ? 'bg-red-100 text-red-800' : 'bg-orange-100 text-orange-800';
+    const border = isCritical ? 'border-red-200 bg-red-50/15 hover:border-red-300' : 'border-orange-200 bg-orange-50/15 hover:border-orange-300';
+    const tag = isCritical ? 'bg-red-100 text-red-800 border-red-200' : 'bg-orange-100 text-orange-800 border-orange-200';
+    const areaName = c.area_display || c.area_id || 'Target Ward';
+
+    // Build breakdown badges
+    let breakdownBadges = '';
+    if (c.category_breakdown && c.category_breakdown.length > 0) {
+      breakdownBadges = c.category_breakdown.map(b => `
+        <span class="bg-white border border-slate-200 px-2 py-0.5 rounded text-[11px] font-semibold text-slate-700 shadow-2xs">
+          <i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i>${escapeHtml(b.category)} <span class="text-slate-400 font-normal">(${b.incident_count} incidents)</span>
+        </span>
+      `).join('');
+    } else if (c.categories && c.categories.length > 0) {
+      breakdownBadges = c.categories.map(cat => `
+        <span class="bg-white border border-slate-200 px-2 py-0.5 rounded text-[11px] font-semibold text-slate-700 shadow-2xs">
+          <i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i>${escapeHtml(cat)}
+        </span>
+      `).join('');
+    }
 
     const card = document.createElement('div');
-    card.className = `rounded-lg border ${border} p-4 transition-all`;
+    card.className = `rounded-lg border ${border} p-4 sm:p-5 transition-all shadow-2xs`;
     card.innerHTML = `
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-        <div class="flex items-center gap-2">
-          <span class="text-xs font-bold px-2 py-0.5 rounded ${tag}">${c.compound_severity || 'HIGH'} PRIORITY</span>
-          <h5 class="font-bold text-[#0F2540] text-sm">${escapeHtml(c.title)}</h5>
+      <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-2.5 mb-3">
+        <div class="flex items-start gap-2.5 min-w-0">
+          <span class="text-[11px] font-extrabold px-2.5 py-1 rounded-md border ${tag} shrink-0 mt-0.5 tracking-wide">
+            <i class="fa-solid fa-circle-exclamation mr-1"></i>${c.compound_severity || 'HIGH'} PRIORITY
+          </span>
+          <div class="min-w-0">
+            <h5 class="font-bold text-[#0F2540] text-sm sm:text-base leading-snug break-words whitespace-normal">${escapeHtml(c.title)}</h5>
+            <p class="text-xs text-slate-500 mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+              <span><i class="fa-solid fa-location-dot text-slate-400 mr-1"></i>${escapeHtml(areaName)}</span>
+              <span>&bull;</span>
+              <span><i class="fa-regular fa-clock text-slate-400 mr-1"></i>Window: ${escapeHtml(c.time_window || 'Current')}</span>
+              ${c.alert_count ? `<span>&bull;</span><span><i class="fa-solid fa-bell text-slate-400 mr-1"></i>${c.alert_count} Anomaly Alerts</span>` : ''}
+            </p>
+          </div>
         </div>
-        <span class="text-xs font-medium text-slate-500"><i class="fa-regular fa-clock mr-1"></i>Window: ${escapeHtml(c.time_window || 'Current')}</span>
       </div>
-      <p class="text-xs text-slate-600 leading-relaxed mb-3">${escapeHtml(c.description)}</p>
-      <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 text-xs">
-        <span class="text-slate-500 font-medium">Overlapping Categories (${c.category_count}):</span>
-        ${(c.categories || []).map(cat => `<span class="bg-white border border-slate-200 px-2 py-0.5 rounded text-[11px] font-semibold text-slate-700"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i>${escapeHtml(cat)}</span>`).join('')}
+
+      <p class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-3 break-words whitespace-normal">${escapeHtml(c.description)}</p>
+
+      ${c.localized_impact ? `
+        <div class="mb-3 p-3 rounded-md bg-amber-50/80 border border-amber-200/90 text-xs text-amber-950 leading-relaxed">
+          <div class="font-bold flex items-center gap-1.5 text-amber-900 mb-1">
+            <i class="fa-solid fa-triangle-exclamation text-amber-600"></i> Localized Neighborhood Impact:
+          </div>
+          <p class="break-words whitespace-normal leading-relaxed text-slate-800">${escapeHtml(c.localized_impact)}</p>
+        </div>
+      ` : ''}
+
+      ${c.recommended_action ? `
+        <div class="mb-3 p-3 rounded-md bg-emerald-50/80 border border-emerald-200/90 text-xs text-emerald-950 leading-relaxed">
+          <div class="font-bold flex items-center gap-1.5 text-emerald-900 mb-1">
+            <i class="fa-solid fa-clipboard-check text-emerald-600"></i> Recommended Municipal Action:
+          </div>
+          <p class="break-words whitespace-normal leading-relaxed text-slate-800">${escapeHtml(c.recommended_action)}</p>
+        </div>
+      ` : ''}
+
+      <div class="flex flex-wrap items-center gap-2 pt-2.5 border-t border-slate-100 text-xs">
+        <span class="text-slate-500 font-semibold">Incident Breakdown (${c.category_count || (c.categories ? c.categories.length : 0)} categories):</span>
+        ${breakdownBadges}
       </div>
     `;
     container.appendChild(card);
@@ -736,36 +924,87 @@ function renderCompoundingCrises(crises) {
 function renderRippleHypotheses(ripples) {
   const container = document.getElementById('ripples-list');
   const badge = document.getElementById('ripples-count-badge');
+  const countTag = document.getElementById('ripples-display-count');
+  const btnText = document.getElementById('text-expand-ripples');
+  const btnIcon = document.getElementById('icon-expand-ripples');
   if (!container) return;
 
-  if (badge) badge.textContent = `${ripples.length} cascading ripple link(s)`;
+  const totalRipples = ripples ? ripples.length : 0;
+  if (badge) badge.textContent = `${totalRipples} cascading ripple link(s)`;
 
   if (!ripples || ripples.length === 0) {
     container.innerHTML = `
       <div class="col-span-2 rounded-md border border-slate-200 bg-slate-50/50 p-4 text-center text-slate-500 text-xs">
         <i class="fa-solid fa-check-circle text-emerald-600 mr-1.5"></i> No time-lagged cascading patterns detected within 24-48h horizon.
       </div>`;
+    const seeMoreBar = document.getElementById('ripples-see-more-container');
+    if (seeMoreBar) seeMoreBar.classList.add('hidden');
     return;
   }
 
+  const seeMoreBar = document.getElementById('ripples-see-more-container');
+  if (seeMoreBar) seeMoreBar.classList.remove('hidden');
+
+  const isExpanded = expansionState.ripples;
+  const defaultLimit = 4;
+  const displayLimit = isExpanded ? totalRipples : defaultLimit;
+  const displayRipples = ripples.slice(0, displayLimit);
+
+  if (countTag) {
+    countTag.textContent = `Showing ${displayRipples.length} of ${totalRipples} cascading hypotheses`;
+  }
+  if (btnText && btnIcon) {
+    btnText.textContent = isExpanded ? 'Show Fewer Hypotheses' : `See All Hypotheses (${totalRipples})`;
+    btnIcon.className = isExpanded ? 'fa-solid fa-chevron-up text-[10px]' : 'fa-solid fa-chevron-down text-[10px]';
+  }
+
   container.innerHTML = '';
-  ripples.forEach(r => {
+  displayRipples.forEach(r => {
     const card = document.createElement('div');
-    card.className = 'rounded-md border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-slate-300 transition-colors';
+    card.className = 'rounded-lg border border-slate-200 bg-white p-4 shadow-2xs hover:border-slate-300 transition-colors flex flex-col justify-between';
+    
+    const titleText = r.plain_english_title || r.hypothesis_title;
+    const noticeText = r.plain_english_notice || r.hypothesis_description;
+    const actionText = r.plain_english_action || r.recommended_action;
+    const lagText = r.plain_english_lag || (r.time_lag_hours ? `${r.time_lag_hours}h Lag` : 'Time-Lagged');
+    const proxText = r.plain_english_proximity || r.proximity_basis || 'Co-located Ward';
+
     card.innerHTML = `
-      <div class="flex items-start justify-between gap-2 mb-2">
-        <div class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-          <span class="text-xs font-bold text-[#0F2540] truncate max-w-[240px]">${escapeHtml(r.hypothesis_title)}</span>
+      <div>
+        <div class="flex items-start justify-between gap-3 mb-2.5">
+          <div class="flex items-start gap-2 min-w-0">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0 mt-1.5"></span>
+            <h5 class="text-xs sm:text-sm font-bold text-[#0F2540] leading-snug break-words whitespace-normal">
+              ${escapeHtml(titleText)}
+            </h5>
+          </div>
+          <span class="text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full shrink-0 whitespace-nowrap">
+            <i class="fa-solid fa-hourglass-half mr-1 text-amber-600"></i>${escapeHtml(lagText)}
+          </span>
         </div>
-        <span class="text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full shrink-0">
-          <i class="fa-solid fa-hourglass-half mr-0.5"></i> ${r.time_lag_hours}h Lag
-        </span>
+
+        <p class="text-xs text-slate-700 mb-3 leading-relaxed break-words whitespace-normal">
+          ${escapeHtml(noticeText)}
+        </p>
+
+        ${actionText ? `
+          <div class="mb-3 p-2.5 rounded-md bg-blue-50/70 border border-blue-200 text-xs text-blue-950 leading-relaxed">
+            <div class="font-bold text-blue-900 flex items-center gap-1.5 mb-1">
+              <i class="fa-solid fa-truck-fast text-blue-600"></i> Recommended Municipal Action:
+            </div>
+            <p class="break-words whitespace-normal text-slate-800">${escapeHtml(actionText)}</p>
+          </div>
+        ` : ''}
       </div>
-      <p class="text-xs text-slate-600 mb-2.5 line-clamp-2">${escapeHtml(r.hypothesis_description)}</p>
-      <div class="text-[11px] text-slate-500 flex items-center justify-between pt-2 border-t border-slate-100">
-        <span><i class="fa-solid fa-location-crosshairs mr-1"></i> ${escapeHtml(r.proximity_basis)}</span>
-        <span class="font-semibold text-amber-800">Hypothesis Only</span>
+
+      <div class="text-[11px] text-slate-500 flex flex-wrap items-center justify-between gap-2 pt-2.5 border-t border-slate-100 mt-2">
+        <span class="flex items-center gap-1 font-medium text-slate-600 truncate max-w-[260px]" title="${escapeHtml(proxText)}">
+          <i class="fa-solid fa-location-crosshairs text-slate-400"></i>
+          ${escapeHtml(proxText)}
+        </span>
+        <span class="font-bold text-amber-800 bg-amber-50/80 border border-amber-200 px-2 py-0.5 rounded text-[10px] shrink-0">
+          Hypothesis for Investigation
+        </span>
       </div>
     `;
     container.appendChild(card);
@@ -778,17 +1017,26 @@ function renderRippleHypotheses(ripples) {
 function renderAlertsTable(alerts) {
   const tbody = document.getElementById('alerts-table-body');
   const countTag = document.getElementById('alerts-count-tag');
+  const displayCount = document.getElementById('alerts-display-count');
+  const btnText = document.getElementById('text-expand-alerts');
+  const btnIcon = document.getElementById('icon-expand-alerts');
   if (!tbody) return;
 
-  if (countTag) countTag.textContent = `${alerts ? alerts.length : 0} Active Alerts`;
+  const totalAlerts = alerts ? alerts.length : 0;
+  if (countTag) countTag.textContent = `${totalAlerts} Active Alerts`;
 
   if (!alerts || alerts.length === 0) {
     tbody.innerHTML = `
       <tr>
         <td colspan="5" class="py-6 text-center text-slate-400 text-sm">No anomalous alerts match active filters.</td>
       </tr>`;
+    const seeMoreBar = document.getElementById('alerts-see-more-container');
+    if (seeMoreBar) seeMoreBar.classList.add('hidden');
     return;
   }
+
+  const seeMoreBar = document.getElementById('alerts-see-more-container');
+  if (seeMoreBar) seeMoreBar.classList.remove('hidden');
 
   // Sort with HIGH severity first, then by anomaly score descending
   const sortedAlerts = [...alerts].sort((a, b) => {
@@ -800,45 +1048,82 @@ function renderAlertsTable(alerts) {
     return bScore - aScore;
   });
 
-  const displayLimit = 50;
+  const isExpanded = expansionState.alerts;
+  const defaultLimit = 10;
+  const displayLimit = isExpanded ? Math.min(50, sortedAlerts.length) : defaultLimit;
   const displayAlerts = sortedAlerts.slice(0, displayLimit);
+
+  if (displayCount) {
+    displayCount.textContent = `Showing top ${displayAlerts.length} of ${sortedAlerts.length} critical alerts`;
+  }
+  if (btnText && btnIcon) {
+    btnText.textContent = isExpanded ? 'Show Fewer Alerts' : `See All Alerts (${sortedAlerts.length})`;
+    btnIcon.className = isExpanded ? 'fa-solid fa-chevron-up text-[10px]' : 'fa-solid fa-chevron-down text-[10px]';
+  }
 
   tbody.innerHTML = '';
   displayAlerts.forEach(a => {
     const sev = (a.severity || 'MEDIUM').toUpperCase();
     const isHigh = sev === 'HIGH';
-    const badgeClass = isHigh ? 'text-orange-700 bg-orange-50 border-orange-200' : 'text-amber-700 bg-amber-50 border-amber-200';
-    const statusText = isHigh ? 'Critical Review' : 'Assigned';
-    const statusClass = isHigh ? 'bg-orange-50 text-orange-700' : 'bg-slate-100 text-slate-600';
+    
+    // Priority badge (Plain English: High Attention / Medium Attention)
+    const priorityBadge = isHigh
+      ? '<span class="text-xs font-bold text-orange-800 bg-orange-100/90 border border-orange-300 px-2.5 py-1 rounded-full whitespace-nowrap"><i class="fa-solid fa-triangle-exclamation mr-1 text-orange-600"></i>High Attention</span>'
+      : '<span class="text-xs font-bold text-amber-800 bg-amber-100/90 border border-amber-300 px-2.5 py-1 rounded-full whitespace-nowrap"><i class="fa-solid fa-clock mr-1 text-amber-600"></i>Medium Attention</span>';
 
+    // Municipal Status (Plain English)
+    const statusBadge = isHigh
+      ? '<span class="text-[11px] font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full whitespace-nowrap">Needs Immediate Review</span>'
+      : '<span class="text-[11px] font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full whitespace-nowrap">Assigned to Field Team</span>';
+
+    // Location / Ward Display
+    let wardTitle = a.area_id || 'Ward';
+    if (a.metrics && a.metrics.statistical_evidence && a.metrics.statistical_evidence.ward_title) {
+      wardTitle = `${a.metrics.statistical_evidence.ward_title} (${a.area_id})`;
+    }
+
+    // Spike Magnitude
     const m = a.metrics || {};
-    const score = m.anomaly_score !== undefined ? m.anomaly_score.toFixed(2) : '3.40';
+    const obs = (m.observed_count !== undefined) ? m.observed_count : 1;
+    const exp = (m.expected_count !== undefined) ? Number(m.expected_count) : 0;
+    let surgeBadge = '';
+    if (exp > 0) {
+      const ratio = (obs / exp).toFixed(1);
+      surgeBadge = `<span class="font-bold text-orange-700 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded text-xs whitespace-nowrap">${ratio}x Volume Surge</span>`;
+    } else {
+      surgeBadge = `<span class="font-bold text-orange-700 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded text-xs whitespace-nowrap">+${obs} Over Normal</span>`;
+    }
+    const baselineDetail = `${obs} observed vs ${exp.toFixed(1)} baseline`;
+
+    // Plain English problem title & summary
+    const categoryName = a.category || 'Civic Infrastructure';
+    const problemSummary = a.description || `Spike of ${obs} incidents reported in ${wardTitle}. Immediate review recommended.`;
 
     const row = document.createElement('tr');
     row.className = 'hover:bg-slate-50/70 transition-colors';
     row.innerHTML = `
-      <td class="py-3 pr-4 font-semibold text-[#0F2540] font-mono text-xs">${escapeHtml(a.alert_id)}</td>
-      <td class="py-3 pr-4 text-slate-700">
-        <p class="font-medium text-xs sm:text-sm text-[#0F2540]">${escapeHtml(a.title)}</p>
-        <p class="text-xs text-slate-500 mt-0.5 line-clamp-1">${escapeHtml(a.description)}</p>
+      <td class="py-3.5 pr-4 text-slate-800 align-top">
+        <span class="font-mono text-xs font-bold text-[#0F2540] bg-slate-100 px-2 py-0.5 rounded border border-slate-200">${escapeHtml(a.alert_id)}</span>
+        <p class="font-semibold text-xs text-slate-700 mt-1">${escapeHtml(wardTitle)}</p>
+        <p class="text-[11px] text-slate-400 mt-0.5">${escapeHtml(a.time_window || 'Current window')}</p>
       </td>
-      <td class="py-3 pr-4 font-mono font-medium text-slate-600">${score}</td>
-      <td class="py-3 pr-4"><span class="text-[11px] font-semibold border ${badgeClass} px-2 py-0.5 rounded-full">${sev}</span></td>
-      <td class="py-3 pr-4"><span class="text-[11px] font-semibold ${statusClass} px-2 py-0.5 rounded-full">${statusText}</span></td>
+      <td class="py-3.5 pr-4 text-slate-700 align-top max-w-[340px]">
+        <div class="flex items-center gap-1.5 mb-0.5">
+          <span class="text-xs font-bold text-[#0F2540]">${escapeHtml(categoryName)} Surge</span>
+        </div>
+        <p class="text-xs text-slate-600 leading-relaxed break-words whitespace-normal line-clamp-2" title="${escapeHtml(problemSummary)}">
+          ${escapeHtml(problemSummary)}
+        </p>
+      </td>
+      <td class="py-3.5 pr-4 align-top">
+        <div class="mb-1">${surgeBadge}</div>
+        <p class="text-xs text-slate-500 font-mono">${baselineDetail}</p>
+      </td>
+      <td class="py-3.5 pr-4 align-top">${priorityBadge}</td>
+      <td class="py-3.5 pr-4 align-top">${statusBadge}</td>
     `;
     tbody.appendChild(row);
   });
-
-  if (sortedAlerts.length > displayLimit) {
-    const noteRow = document.createElement('tr');
-    noteRow.className = 'bg-slate-50/50';
-    noteRow.innerHTML = `
-      <td colspan="5" class="py-3 text-center text-xs text-slate-500 font-medium">
-        Showing top ${displayLimit} critical anomalies of ${sortedAlerts.length} total. Filter by ward or priority above for targeted analysis.
-      </td>
-    `;
-    tbody.appendChild(noteRow);
-  }
 }
 
 // -------------------------------------------------------------------------
@@ -978,56 +1263,121 @@ function useFallbackMockData() {
       {
         alert_id: "ALT-WARD-12-WATER-001",
         title: "[HIGH ALERT] Surge in Water Infrastructure - Area Ward 12 — Riverside",
-        description: "Civic spike detected: An anomalous surge of 642 incidents against baseline 180.0.",
+        description: "Civic spike detected: An anomalous surge of 642 water pipeline & drainage incidents against expected baseline 180.0.",
         severity: "HIGH",
         area_id: "Ward 12 — Riverside",
-        category: "Water Infrastructure",
-        metrics: { observed_count: 642, expected_count: 180.0, anomaly_score: 4.85 }
+        category: "Water Supply & Drainage",
+        time_window: "2026-10-10",
+        metrics: {
+          observed_count: 642,
+          expected_count: 180.0,
+          anomaly_score: 4.85,
+          statistical_evidence: { ward_title: "Riverside Sector" }
+        }
       },
       {
         alert_id: "ALT-WARD-04-LIGHT-002",
         title: "[HIGH ALERT] Surge in Streetlight Outage Cluster - Area Ward 04 — Old Town",
-        description: "Civic spike detected: Streetlight outages in Ward 04.",
+        description: "Civic spike detected: 398 dark street & pole failure reports in Ward 04 compared to baseline 160.0.",
         severity: "HIGH",
         area_id: "Ward 04 — Old Town",
-        category: "Streetlight Outage Cluster",
-        metrics: { observed_count: 398, expected_count: 160.0, anomaly_score: 3.20 }
+        category: "Streetlight & Electrical",
+        time_window: "2026-10-10",
+        metrics: {
+          observed_count: 398,
+          expected_count: 160.0,
+          anomaly_score: 3.20,
+          statistical_evidence: { ward_title: "Old Town Heritage" }
+        }
       },
       {
         alert_id: "ALT-WARD-27-FLOOD-003",
         title: "[MEDIUM ALERT] Surge in Road Flooding - Area Ward 27 — Lakeview",
-        description: "Civic spike detected: Road Flooding in Ward 27.",
+        description: "Civic spike detected: 211 road waterlogging complaints against expected baseline 65.0.",
         severity: "MEDIUM",
         area_id: "Ward 27 — Lakeview",
-        category: "Road Flooding",
-        metrics: { observed_count: 211, expected_count: 65.0, anomaly_score: 3.45 }
+        category: "Roads & Infrastructure",
+        time_window: "2026-10-10",
+        metrics: {
+          observed_count: 211,
+          expected_count: 65.0,
+          anomaly_score: 3.45,
+          statistical_evidence: { ward_title: "Lakeview North" }
+        }
       }
     ],
     spatial_clusters: {
       total_areas: 47,
-      active_areas: ["Ward 12 — Riverside", "Ward 04 — Old Town", "Ward 27 — Lakeview"],
+      active_areas: ["Ward 12 — Riverside", "Ward 04 — Old Town", "Ward 27 — Lakeview", "Ward 31 — Greenfield"],
       by_geography: {
-        "Ward 12 — Riverside": [{ severity: "HIGH", metrics: { observed_count: 642 } }],
-        "Ward 04 — Old Town": [{ severity: "HIGH", metrics: { observed_count: 398 } }],
-        "Ward 27 — Lakeview": [{ severity: "MEDIUM", metrics: { observed_count: 211 } }],
-        "Ward 31 — Greenfield": [{ severity: "LOW", metrics: { observed_count: 154 } }]
+        "Ward 12 — Riverside": [{ severity: "HIGH", metrics: { observed_count: 642, statistical_evidence: { ward_title: "Riverside Sector" } } }],
+        "Ward 04 — Old Town": [{ severity: "HIGH", metrics: { observed_count: 398, statistical_evidence: { ward_title: "Old Town Heritage" } } }],
+        "Ward 27 — Lakeview": [{ severity: "MEDIUM", metrics: { observed_count: 211, statistical_evidence: { ward_title: "Lakeview North" } } }],
+        "Ward 31 — Greenfield": [{ severity: "LOW", metrics: { observed_count: 154, statistical_evidence: { ward_title: "Greenfield Park" } } }]
       },
       compounding_crises: [
         {
-          title: "Compounding Civic Crisis [HIGH]: 2 Concurrent Issues in Ward 12 — Riverside",
-          description: "Multi-category crisis in Ward 12 during same time window.",
+          crisis_id: "CRISIS-WARD-12-001",
+          title: "Water Logging & Road Surface Deterioration in Riverside (Ward 12)",
+          description: "Severe water leakage and stormwater drainage overflow are actively compounding road sub-base deterioration in Riverside (Ward 12). Submerged potholes and road cave-ins are directly bottlenecking commuter transit.",
+          localized_impact: "Stagnant water runoff undermines asphalt foundations across Riverside (Ward 12), doubling physical street deterioration and concealing road craters beneath standing pools.",
+          recommended_action: "Dispatch Water Supply & Sewerage (BWSSB) drainage pumps immediately to de-water carriageways before deploying Road Infrastructure emergency cold-patch asphalt teams.",
+          compound_severity: "CRITICAL",
+          category_count: 2,
+          alert_count: 2,
+          time_window: "2026-10-10",
+          area_display: "Riverside (Ward 12)",
+          breakdown_text: "Roads & Infrastructure (4 incidents), Water Supply & Drainage (3 incidents)",
+          category_breakdown: [
+            { category: "Roads & Infrastructure", incident_count: 4 },
+            { category: "Water Supply & Drainage", incident_count: 3 }
+          ],
+          categories: ["Roads & Infrastructure", "Water Supply & Drainage"]
+        },
+        {
+          crisis_id: "CRISIS-WARD-04-002",
+          title: "Streetlight Outages & Public Transit Safety in Old Town (Ward 04)",
+          description: "Widespread electrical luminaire failures co-occurring with traffic congestion reports across Old Town (Ward 04). Extinguished corridor lighting degrades driver nighttime visibility at key transit intersections.",
+          localized_impact: "Darkened arterial corridors substantially increase pedestrian vulnerability and elevate nighttime vehicular collision frequency in Old Town.",
+          recommended_action: "Dispatch BESCOM power distribution line inspectors and prioritize high-visibility transit junction mobile floodlight units.",
           compound_severity: "HIGH",
           category_count: 2,
-          categories: ["Water Infrastructure", "Drainage Backflow"]
+          alert_count: 2,
+          time_window: "2026-10-10",
+          area_display: "Old Town (Ward 04)",
+          breakdown_text: "Streetlight & Electrical (3 incidents), Traffic & Safety (2 incidents)",
+          category_breakdown: [
+            { category: "Streetlight & Electrical", incident_count: 3 },
+            { category: "Traffic & Safety", incident_count: 2 }
+          ],
+          categories: ["Streetlight & Electrical", "Traffic & Safety"]
         }
       ]
     },
     ripple_hypotheses: [
       {
-        hypothesis_title: "Potential Cascade: 'Water Infrastructure' preceding 'Health & Sanitation' in Ward 12 (30h lag)",
-        hypothesis_description: "Early water failures in Ward 12 followed by sanitation complaints.",
-        time_lag_hours: 30.0,
-        proximity_basis: "WARD_CO_LOCATION"
+        hypothesis_id: "RIP-001",
+        hypothesis_title: "Potential Cascade: Water Supply Disruptions preceding Sanitation Complaints in Ward 12 (24h lag)",
+        hypothesis_description: "Field data shows pipe bursts and contaminated supply alerts are followed 24 hours later by sewage backflow reports.",
+        plain_english_title: "Notice: Pothole & road complaints in Ward 12 often lead to garbage pileups 24 hours later (1 day later)",
+        plain_english_notice: "Field data shows road surface deterioration and pothole clusters in Ward 12 are frequently followed by uncollected garbage complaints 24 hours later. Damaged roads prevent municipal waste compactor trucks from accessing neighborhood lanes, causing missed collection rounds.",
+        plain_english_action: "Dispatch road patching crews immediately to clear route access and alert Solid Waste Management to deploy smaller tippers to bypass road obstructions.",
+        plain_english_proximity: "Within 2.4 km radius in Riverside (Ward 12)",
+        plain_english_lag: "24h Lag (1 Day)",
+        time_lag_hours: 24.0,
+        proximity_basis: "Within 2.4 km radius"
+      },
+      {
+        hypothesis_id: "RIP-002",
+        hypothesis_title: "Potential Cascade: Streetlight Outages preceding Traffic Incidents in Ward 04 (36h lag)",
+        hypothesis_description: "Major streetlight blackout cluster preceding vehicular collisions by 36 hours.",
+        plain_english_title: "Notice: Electrical lighting failure in Ward 04 often leads to traffic congestion and safety hazards 36 hours later",
+        plain_english_notice: "Dark intersections reduce evening vehicle throughput and cause intersection gridlock during peak return hours in Ward 04.",
+        plain_english_action: "Fast-track junction electrical repair and station municipal traffic wardens at affected Old Town junctions during evening peak hours.",
+        plain_english_proximity: "Within 1.8 km radius in Old Town (Ward 04)",
+        plain_english_lag: "36h Lag (1.5 Days)",
+        time_lag_hours: 36.0,
+        proximity_basis: "Within 1.8 km radius"
       }
     ]
   };

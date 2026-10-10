@@ -369,6 +369,140 @@ def group_by_geography(
 # 2. Cross-Category Analysis (Compounding Civic Crises)
 # ---------------------------------------------------------------------------
 
+def _format_compounding_narrative(
+    area: str,
+    tw: str,
+    unique_categories: List[str],
+    category_map: Dict[str, List[AlertResponse]],
+    compound_severity: str,
+    bucket_alerts: List[AlertResponse],
+) -> Dict[str, str]:
+    """
+    Dynamically generates customized, localized titles, problem descriptions,
+    localized neighborhood impacts, and recommended municipal actions
+    for compounding civic crises, eliminating repetitive boilerplate strings.
+    """
+    # 1. Resolve localized ward title from alert metadata
+    ward_title = None
+    for a in bucket_alerts:
+        raw_metrics = getattr(a, "metrics", {}) or {}
+        if hasattr(raw_metrics, "model_dump"):
+            m = raw_metrics.model_dump()
+        elif isinstance(raw_metrics, dict):
+            m = raw_metrics
+        else:
+            m = {}
+        ev = m.get("statistical_evidence", {}) or {}
+        if isinstance(ev, dict) and ev.get("ward_title"):
+            ward_title = str(ev["ward_title"]).strip()
+            break
+
+    if ward_title and ward_title.lower() != str(area).lower():
+        clean_num = str(area).replace("ward_", "Ward ").replace("ward", "Ward ")
+        area_display = f"{ward_title} ({clean_num})"
+    elif str(area).lower().startswith("ward_"):
+        area_display = f"Ward {str(area).replace('ward_', '')}"
+    else:
+        area_display = str(area)
+
+    # 2. Compute specific category counts and breakdown
+    cat_details = []
+    for cat in unique_categories:
+        count = sum(
+            int(
+                (getattr(a, "metrics", {}) or {}).get("observed_count", 1)
+                if isinstance(getattr(a, "metrics", {}), dict)
+                else getattr(getattr(a, "metrics", {}), "observed_count", 1)
+            )
+            for a in category_map[cat]
+        )
+        cat_details.append(f"{cat} ({count} incident{'s' if count != 1 else ''})")
+
+    breakdown_text = ", ".join(cat_details)
+
+    # 3. Analyze specific interaction pairs
+    cats_lower = [c.lower() for c in unique_categories]
+    has_roads = any("road" in c or "pothole" in c or "infrastructure" in c for c in cats_lower)
+    has_water = any("water" in c or "drainage" in c or "flood" in c for c in cats_lower)
+    has_waste = any("sanitation" in c or "waste" in c or "garbage" in c or "clean" in c for c in cats_lower)
+    has_light = any("light" in c or "electric" in c or "power" in c for c in cats_lower)
+    has_traffic = any("traffic" in c or "signal" in c or "transit" in c for c in cats_lower)
+    has_park = any("park" in c or "green" in c or "tree" in c or "animal" in c for c in cats_lower)
+    has_health = any("health" in c or "disease" in c or "contamination" in c or "pollution" in c for c in cats_lower)
+
+    if has_roads and has_water:
+        title = f"Water Logging & Road Surface Deterioration in {area_display}"
+        desc = (
+            f"Severe water leakage and stormwater drainage overflow are actively compounding road sub-base deterioration in {area_display}. "
+            f"Submerged potholes and road cave-ins are directly bottlenecking commuter transit, with {breakdown_text} recorded during window '{tw}'."
+        )
+        impact = f"Stagnant water runoff undermines asphalt foundations across {area_display}, doubling physical street deterioration and concealing road craters beneath standing pools."
+        action = "Dispatch Water Supply & Sewerage (BWSSB) drainage pumps immediately to de-water carriageways before deploying Road Infrastructure emergency cold-patch asphalt teams."
+
+    elif has_roads and has_traffic:
+        title = f"Road Surface Cave-ins & Severe Traffic Bottlenecks in {area_display}"
+        desc = (
+            f"Major road surface defects and pothole clusters in {area_display} are severely throttling commuter lanes, "
+            f"triggering spillover traffic congestion ({breakdown_text}) during window '{tw}'."
+        )
+        impact = f"Vehicles diverting onto narrow residential feeder lanes in {area_display} causes localized gridlock and acute safety hazards for pedestrians and schoolchildren."
+        action = "Deploy municipal traffic marshals for intersection detour management while Road Maintenance emergency units install barricades and rapid asphalt patches."
+
+    elif has_water and (has_waste or has_health):
+        title = f"Drainage Blockage & Public Sanitation Hazard in {area_display}"
+        desc = (
+            f"Blocked stormwater drains and uncollected solid waste are compounding in {area_display}. "
+            f"Accumulated garbage obstructs drainage outflows, threatening localized street sewage backflows ({breakdown_text}) during window '{tw}'."
+        )
+        impact = f"Overflowing sewage and stagnant runoff near residential doorsteps in {area_display} generates severe vector-borne disease risks, odor complaints, and environmental contamination."
+        action = "Deploy mechanical drain jetting and suction tankers alongside priority Solid Waste clearing tippers to open clogged neighborhood culverts."
+
+    elif has_waste and has_roads:
+        title = f"Road Access Barriers & Garbage Collection Backlog in {area_display}"
+        desc = (
+            f"Severe road surface degradation in {area_display} is blocking heavy municipal collection vehicles, "
+            f"triggering uncollected garbage pileups alongside road damage complaints ({breakdown_text}) during window '{tw}'."
+        )
+        impact = f"Sanitation compactor trucks cannot navigate damaged lane corridors, leaving uncollected solid waste mounds along primary thoroughfares in {area_display}."
+        action = "Reroute solid waste collection trucks along alternative feeder lanes and prioritize road leveling on key waste transport routes."
+
+    elif has_light and (has_traffic or has_roads):
+        title = f"Corridor Blackout & Traffic Signal Malfunction in {area_display}"
+        desc = (
+            f"Electrical grid instability has triggered concurrent street lighting outages and traffic signal failures along transit corridors in {area_display} ({breakdown_text}) during window '{tw}'."
+        )
+        impact = f"Darkened transit corridors and unmonitored intersections in {area_display} significantly elevate evening road collision risks and pedestrian safety vulnerabilities."
+        action = "Alert Electricity Supply Corporation (BESCOM) and Municipal Electrical Engineering for immediate transformer feeder inspection and signal battery backup restoration."
+
+    elif has_park and (has_health or has_waste):
+        title = f"Park Grounds Neglect & Open Waste Accumulation in {area_display}"
+        desc = (
+            f"Overgrown public park spaces, broken municipal enclosures, and illegal waste dumping are coinciding in {area_display} ({breakdown_text}) during window '{tw}'."
+        )
+        impact = f"Degraded public open spaces and open littering compromise community recreational access and provoke neighborhood environmental sanitation complaints."
+        action = "Mobilize Horticulture Department cleanup crews alongside sanitation marshals for park perimeter fencing repair and thorough debris clearing."
+
+    else:
+        cat_1 = unique_categories[0]
+        cat_2 = unique_categories[1]
+        title = f"Concurrent Civic Infrastructure Stress: {cat_1} & {cat_2} in {area_display}"
+        desc = (
+            f"Concurrent municipal service disruptions observed in {area_display}: {breakdown_text} during window '{tw}'. "
+            f"When distinct civic domains fail simultaneously in the same ward, municipal field response times double due to shared regional logistics."
+        )
+        impact = f"Simultaneous disruptions across {len(unique_categories)} distinct service domains place acute compounding strain on neighborhood operations in {area_display}."
+        action = f"Convene joint multi-departmental field inspection in {area_display} with department heads of {cat_1} and {cat_2} for synchronized remediation."
+
+    return {
+        "title": title,
+        "description": desc,
+        "localized_impact": impact,
+        "recommended_action": action,
+        "area_display": area_display,
+        "breakdown_text": breakdown_text,
+    }
+
+
 def cross_category_analysis(alerts: List[AlertResponse]) -> List[Dict[str, Any]]:
     """
     Scans for multiple anomaly categories occurring in the same geographic area
@@ -420,22 +554,19 @@ def cross_category_analysis(alerts: List[AlertResponse]) -> List[Dict[str, Any]]
             clean_area = str(area).replace(" ", "-").upper()
             crisis_id = f"CRISIS-{clean_area}-{uuid.uuid4().hex[:6].upper()}"
 
-            category_list_str = ", ".join(unique_categories)
-            title = (
-                f"Compounding Civic Crisis [{compound_severity}]: "
-                f"{len(unique_categories)} Concurrent Issues in Area {area}"
-            )
-            description = (
-                f"Compounding multi-category crisis detected in Area '{area}' during time window '{tw}'. "
-                f"Concurrent anomalies observed across {len(unique_categories)} distinct municipal categories "
-                f"({category_list_str}) with {len(bucket_alerts)} active alerts. "
-                f"Co-occurring systemic failures place compounding strain on civic infrastructure. "
-                f"Coordinated cross-agency municipal intervention required."
+            narrative = _format_compounding_narrative(
+                area=area,
+                tw=tw,
+                unique_categories=unique_categories,
+                category_map=category_map,
+                compound_severity=compound_severity,
+                bucket_alerts=bucket_alerts,
             )
 
             crisis_record: Dict[str, Any] = {
                 "crisis_id": crisis_id,
                 "area_id": area,
+                "area_display": narrative["area_display"],
                 "time_window": tw,
                 "categories": unique_categories,
                 "category_count": len(unique_categories),
@@ -443,8 +574,11 @@ def cross_category_analysis(alerts: List[AlertResponse]) -> List[Dict[str, Any]]
                 "alert_ids": alert_ids,
                 "max_severity": "HIGH" if has_high else "MEDIUM",
                 "compound_severity": compound_severity,
-                "title": title,
-                "description": description,
+                "title": narrative["title"],
+                "description": narrative["description"],
+                "localized_impact": narrative["localized_impact"],
+                "recommended_action": narrative["recommended_action"],
+                "breakdown_text": narrative["breakdown_text"],
                 "category_breakdown": {
                     cat: len(alts) for cat, alts in category_map.items()
                 },
@@ -489,6 +623,132 @@ def _is_known_archetype(antecedent_cat: str, subsequent_cat: str) -> bool:
             if any(c in s_lower for c in cascades):
                 return True
     return False
+
+
+def _format_plain_english_ripple(
+    alert_a: AlertResponse,
+    alert_b: AlertResponse,
+    cat_a: str,
+    cat_b: str,
+    area_a: str,
+    area_b: str,
+    lag_hours: float,
+    dist_km: Optional[float],
+) -> Dict[str, str]:
+    """
+    Translates raw IDs, time intervals, and technical jargon into clear, plain-English
+    narratives, notices, and recommended field actions tailored for non-technical municipal workers.
+    """
+    # 1. Ward title resolution
+    def _get_ward_title(al: AlertResponse) -> Optional[str]:
+        m = getattr(al, "metrics", {}) or {}
+        if hasattr(m, "model_dump"):
+            m = m.model_dump()
+        ev = m.get("statistical_evidence", {}) if isinstance(m, dict) else getattr(m, "statistical_evidence", {})
+        if isinstance(ev, dict) and ev.get("ward_title"):
+            return str(ev["ward_title"]).strip()
+        return None
+
+    wt_a = _get_ward_title(alert_a)
+    wt_b = _get_ward_title(alert_b)
+
+    if area_a == area_b:
+        if wt_a and wt_a.lower() != str(area_a).lower():
+            clean_num = str(area_a).replace("ward_", "Ward ").replace("ward", "Ward ")
+            loc_str = f"{wt_a} ({clean_num})"
+        elif str(area_a).lower().startswith("ward_"):
+            loc_str = f"Ward {str(area_a).replace('ward_', '')}"
+        else:
+            loc_str = f"Area {area_a}"
+    else:
+        name_a = f"{wt_a} ({area_a})" if wt_a else area_a
+        name_b = f"{wt_b} ({area_b})" if wt_b else area_b
+        loc_str = f"{name_a} and neighboring {name_b}"
+
+    # 2. Plain-English time lag
+    if lag_hours <= 1.5:
+        lag_phrase = "within 1–2 hours"
+        lag_badge = f"{int(round(lag_hours))}h Lag (Immediate)"
+    elif lag_hours <= 12.0:
+        lag_phrase = f"within {int(round(lag_hours))} hours"
+        lag_badge = f"{int(round(lag_hours))}h Lag (Same Day)"
+    elif 18.0 <= lag_hours <= 30.0:
+        lag_phrase = "24 hours later (1 day later)"
+        lag_badge = "24h Lag (1 Day)"
+    elif 36.0 <= lag_hours <= 54.0:
+        lag_phrase = "48 hours later (2 days later)"
+        lag_badge = "48h Lag (2 Days)"
+    else:
+        days = int(round(lag_hours / 24.0))
+        lag_phrase = f"{days} days later"
+        lag_badge = f"{int(round(lag_hours))}h Lag ({days} Days)"
+
+    # 3. Proximity plain-English
+    if dist_km is not None and dist_km > 0:
+        prox_text = f"Within {dist_km:.1f} km radius in {loc_str}"
+    else:
+        prox_text = f"Same ward location in {loc_str}"
+
+    # 4. Domain-specific cause-and-effect notice for municipal employees
+    c_a = cat_a.lower()
+    c_b = cat_b.lower()
+
+    if ("road" in c_a or "pothole" in c_a) and ("waste" in c_b or "sanitation" in c_b):
+        title = f"Notice: Pothole & road complaints in {loc_str} often lead to garbage pileups {lag_phrase}"
+        notice = (
+            f"Field data shows road surface deterioration and pothole clusters in {loc_str} "
+            f"are frequently followed by uncollected garbage complaints {lag_phrase}. "
+            f"Damaged roads prevent municipal waste compactor trucks from accessing neighborhood lanes, causing missed collection rounds."
+        )
+        action = "Dispatch road patching crews immediately to clear route access and alert Solid Waste Management to deploy smaller tippers to bypass road obstructions."
+
+    elif ("road" in c_a or "pothole" in c_a) and ("traffic" in c_b or "safety" in c_b):
+        title = f"Notice: Road surface cave-ins in {loc_str} trigger severe traffic bottlenecks {lag_phrase}"
+        notice = (
+            f"Unaddressed road craters and asphalt degradation in {loc_str} reliably precipitate major traffic congestion {lag_phrase} "
+            f"as vehicles abruptly swerve or decelerate to avoid road damage."
+        )
+        action = "Deploy emergency road asphalt patching and coordinate with municipal traffic wardens for temporary lane diversion."
+
+    elif ("water" in c_a or "drainage" in c_a) and ("health" in c_b or "sanitation" in c_b):
+        title = f"Notice: Water pipeline leaks in {loc_str} often precede sanitation & contamination complaints {lag_phrase}"
+        notice = (
+            f"Water pipeline bursts and drainage backflow in {loc_str} frequently precipitate sanitation overflow complaints {lag_phrase}. "
+            f"Water main pressure loss and pooling water compromise local drainage networks and create stagnant pools."
+        )
+        action = "Dispatch Water & Sewerage (BWSSB) technicians to isolate pipeline leaks and deploy drain desilting crews for preventive flushing."
+
+    elif ("water" in c_a or "drainage" in c_a) and ("road" in c_b or "infrastructure" in c_b):
+        title = f"Notice: Water pipe leaks in {loc_str} frequently precede asphalt cave-ins {lag_phrase}"
+        notice = (
+            f"Subterranean water leakage and blocked stormwater runoff in {loc_str} are followed by road cave-ins {lag_phrase}. "
+            f"Water seepage weakens underlying roadway soil sub-bases, causing sudden asphalt collapse under heavy vehicular load."
+        )
+        action = "Inspect underground pipeline joints and test road foundations for sub-surface voids before cave-ins expand."
+
+    elif ("power" in c_a or "electric" in c_a) and ("light" in c_b or "signal" in c_b):
+        title = f"Notice: Power supply drops in {loc_str} precede street lighting & traffic signal blackouts {lag_phrase}"
+        notice = (
+            f"Electrical grid voltage drops in {loc_str} frequently cascade into street lighting and traffic signal failures {lag_phrase}."
+        )
+        action = "Notify electricity distribution utility (BESCOM) to check substation feeder lines and ensure emergency signal battery backups are functional."
+
+    else:
+        title = f"Notice: '{cat_a}' spikes in {loc_str} often precede '{cat_b}' complaints {lag_phrase}"
+        notice = (
+            f"An initial civic surge of '{cat_a}' in {loc_str} was followed by an uptick in '{cat_b}' incidents {lag_phrase}. "
+            f"Historical municipal tracking indicates early infrastructure strain in {cat_a} precipitates secondary service breakdowns."
+        )
+        action = f"Alert {cat_b} department supervisors to conduct early field inspection in {loc_str} before community complaints multiply."
+
+    return {
+        "plain_title": title,
+        "plain_notice": notice,
+        "plain_action": action,
+        "plain_proximity": prox_text,
+        "plain_lag": lag_badge,
+        "loc_display": loc_str,
+    }
 
 
 def civic_ripple_engine(
@@ -543,11 +803,9 @@ def civic_ripple_engine(
             lag_hours = (ts_b - ts_a).total_seconds() / 3600.0
 
             if lag_hours < min_lag_hours:
-                # Alerts occurred too close together (simultaneous/co-occurring rather than cascading)
                 continue
 
             if lag_hours > max_lag_hours:
-                # Exceeded cascading time horizon; since alerts are sorted, subsequent alerts will also exceed
                 break
 
             # Cascades occur across different issue categories
@@ -563,17 +821,14 @@ def civic_ripple_engine(
             dist_km: Optional[float] = None
 
             if has_coords_a and has_coords_b:
-                # Both have coordinates -> calculate great-circle distance
                 try:
                     dist_km = haversine_distance(lat_a, lon_a, lat_b, lon_b)  # type: ignore[arg-type]
                     if dist_km <= max_distance_km:
                         is_proximate = True
                         proximity_basis = f"COORDINATE_PROXIMITY ({dist_km:.2f} km)"
                 except Exception:
-                    # In case of any calculation error, fall back to ward comparison safely
                     dist_km = None
 
-            # Fallback to administrative ward / area_id when coordinates are missing or sparse
             if not is_proximate:
                 if area_a != "UNKNOWN" and area_b != "UNKNOWN" and area_a == area_b:
                     is_proximate = True
@@ -587,6 +842,17 @@ def civic_ripple_engine(
             hypothesis_id = f"HYP-RIPPLE-{uuid.uuid4().hex[:8].upper()}"
 
             clean_area = area_a if area_a == area_b else f"{area_a} / {area_b}"
+
+            plain_ripple = _format_plain_english_ripple(
+                alert_a=alert_a,
+                alert_b=alert_b,
+                cat_a=cat_a,
+                cat_b=cat_b,
+                area_a=area_a,
+                area_b=area_b,
+                lag_hours=lag_hours,
+                dist_km=dist_km,
+            )
 
             hypothesis_title = (
                 f"[INVESTIGATIVE HYPOTHESIS] Potential Cascade: '{cat_a}' preceding '{cat_b}' "
@@ -616,6 +882,12 @@ def civic_ripple_engine(
                 ),
                 "hypothesis_title": hypothesis_title,
                 "hypothesis_description": hypothesis_desc,
+                "plain_english_title": plain_ripple["plain_title"],
+                "plain_english_notice": plain_ripple["plain_notice"],
+                "plain_english_action": plain_ripple["plain_action"],
+                "plain_english_proximity": plain_ripple["plain_proximity"],
+                "plain_english_lag": plain_ripple["plain_lag"],
+                "location_display": plain_ripple["loc_display"],
                 "area_id": clean_area,
                 "antecedent_alert_id": alert_a.alert_id,
                 "subsequent_alert_id": alert_b.alert_id,
@@ -627,10 +899,7 @@ def civic_ripple_engine(
                 "spatial_distance_km": round(dist_km, 2) if dist_km is not None else None,
                 "proximity_basis": proximity_basis,
                 "is_known_archetype": is_archetype,
-                "recommended_action": (
-                    f"Dispatch cross-departmental team to inspect potential causal ripple between "
-                    f"'{cat_a}' infrastructure and '{cat_b}' services in {clean_area}."
-                ),
+                "recommended_action": plain_ripple["plain_action"],
                 "antecedent_alert": alert_a,
                 "subsequent_alert": alert_b,
             }
